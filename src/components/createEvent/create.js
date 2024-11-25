@@ -7,6 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
 import { createEventDetails, eventCategoryDetails } from "../../redux/eventSlice";
+import Button from '../button/button';
+import Card from '../card/card';
+import CustomInput from '../customInput/customInput';
+import CustomTextArea from '../customInput/customTextArea';
 import CustomTable from '../table/speakerEventTable';
 
 const headers = ['Speaker Name', 'Speaker Type', 'speaker Image'];
@@ -175,197 +179,261 @@ const CreateEvent = () => {
                     top: '90px', width: '17%', textAlign: 'center', left: "50%",
                 }}
             />
-            <div className="event-container-form mb-4">
-                <div className='event-main-container'>
-                    <p className='event-main-heading'>Create Event</p>
+            <div >
+                <div className="mb-4">
+                    <Card >
+                        <h3>Create Event</h3>
+                    </Card>
                 </div>
 
 
                 <Form className='create-event' onSubmit={handleSubmit}>
+
                     <Row>
-                        <Col lg={6} md={12}>
-                            <div className='booking-main-head'>
-                                <p className='event-main-heading mb-5'>Event Details</p>
+
+                        <Col lg={6} md={12} className='mb-4'>
+                            <Card>
+                                <div className='booking-main-head'>
+                                    <h3 className=' mb-4'>Event Details</h3>
 
 
-                                <Form.Group controlId="eventId" className="mb-5">
-                                    <Form.Label className='form-event'>Event Category <span className='span-star'>*</span></Form.Label>
+                                    <Form.Group controlId="eventId" className="mb-3">
+                                        <CustomInput
+                                            type="dropdown"
+                                            label="Event Category"
+                                            options={categories}
+                                            value={formValues.eventId}
+                                            onChange={handleChange}
+                                            name="eventId"
+                                        />
 
-                                    <Form.Control
-                                        className='form-event-control'
-                                        as="select"
-                                        name='eventId'
-                                        value={formValues.eventId || ""}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="">Select category</option>
-                                        {categories.map((category) => (
-                                            <option key={category._id} value={category._id}>
-                                                {category.name}
-                                            </option>
-                                        ))}
-                                    </Form.Control>
-                                    <p style={{ color: 'red' }}>{error.eventId}</p>
+                                        <p style={{ color: 'red' }}>{error.eventId}</p>
 
-                                </Form.Group>
+                                    </Form.Group>
 
-                                <Form.Group controlId="eventName" className="mb-5">
-                                    <Form.Label className='form-event'>Event Name <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-control' type="text" name='eventName' placeholder="Enter event title" value={formValues.eventName} onChange={handleChange} />
-                                    <p style={{ color: 'red' }}>{error.eventName}</p>
-                                </Form.Group>
+                                    <Form.Group controlId="eventName" className="mb-3">
+                                        <CustomInput
+                                            type="text"
+                                            label="Event Name"
+                                            value={formValues.eventName}
+                                            onChange={handleChange}
+                                            name="eventName"
+                                        />
+                                        <p style={{ color: 'red' }}>{error.eventName}</p>
+                                    </Form.Group>
 
-                                <Form.Group controlId="eventDescription" className="mb-5">
-                                    <Form.Label className='form-event'>Event Description <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-description' name='eventDescription' as="textarea" rows={5} placeholder="Enter event description" value={formValues.eventDescription} onChange={handleChange} />
-                                    <p style={{ color: 'red' }}>{error.eventDescription}</p>
-                                </Form.Group>
+                                    <Form.Group controlId="eventDescription" className="mb-3">
+                                        <CustomTextArea
+                                            label="Event Description"
+                                            value={formValues.eventDescription}
+                                            onChange={handleChange}
+                                            name="eventDescription"
+                                        />
 
-                                <Form.Group controlId="eventDate" className="mb-5">
-                                    <Form.Label className='form-event'>Event Date <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-control' name="eventDate" type="date" value={formValues.eventDate} onChange={handleChange} />
-                                    <p style={{ color: 'red' }}>{error.eventDate}</p>
+                                        <p style={{ color: 'red' }}>{error.eventDescription}</p>
+                                    </Form.Group>
 
-                                </Form.Group>
+                                    <Form.Group controlId="eventDate" className="mb-3">
+                                        <CustomInput
+                                            type="date"
+                                            label="Event Date"
+                                            value={formValues.eventDate}
+                                            onChange={handleChange}
+                                            name="eventDate"
+                                        />
+                                        <p style={{ color: 'red' }}>{error.eventDate}</p>
 
-                                <Form.Group controlId="eventDate" className="mb-5">
-                                    <Form.Label className='form-event'>Event Time <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-control' name="eventTime" type="time" value={formValues.eventTime} onChange={handleChange} />
-                                    <p style={{ color: 'red' }}>{error.eventTime}</p>
+                                    </Form.Group>
 
-                                </Form.Group>
+                                    <Form.Group controlId="eventDate" className="mb-3">
+                                        <CustomInput
+                                            type="time"
+                                            label="Event Time"
+                                            value={formValues.eventTime}
+                                            onChange={handleChange}
+                                            name="eventTime"
+                                        />
+                                        <p style={{ color: 'red' }}>{error.eventTime}</p>
 
-
-
-
-                                <Form.Group controlId="price" className="mb-5">
-                                    <Form.Label className='form-event'>Event Price <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-control' name="price" type="text" placeholder="Enter price" value={formValues.price} onChange={handleChange} />
-                                    <p style={{ color: 'red' }}>{error.price}</p>
-
-                                </Form.Group>
-
-
-                                <Row>
-                                    <Col>
-                                        <Form.Group controlId="address" className="mb-5">
-                                            <Form.Label className='form-event'>Location <span className='span-star'>*</span></Form.Label>
-
-                                            <Autocomplete
-                                                apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
-                                                className='form-event-control form-control'
-                                                name="location"
-
-                                                onPlaceSelected={(place) => {
-                                                    console.log(place);
-                                                    const lat = place.geometry.location.lat(); // Get latitude
-                                                    const long = place.geometry.location.lng(); // Get longitude
-
-                                                    setFormValues((prevValues) => ({
-                                                        ...prevValues,
-                                                        location: place.formatted_address,
-                                                        lat: lat,
-                                                        long: long
-                                                    }));
-                                                }}
-                                            />
-                                        </Form.Group>
-
-
-                                    </Col>
+                                    </Form.Group>
 
 
 
 
+                                    <Form.Group controlId="price" className="mb-3">
+                                        <CustomInput
+                                            type="text"
+                                            label="Event Price"
+                                            value={formValues.price}
+                                            onChange={handleChange}
+                                            name="price"
+                                        />
+                                        <p style={{ color: 'red' }}>{error.price}</p>
 
-                                </Row>
-
-                                <Row>
-                                    <Col>
-                                        <Form.Group controlId="eventType" className="mb-5">
-                                            <Form.Label className='form-event'>Event Type <span className='span-star'>*</span></Form.Label>
-                                            <Form.Control className='form-event-control' name='eventType' type="text" placeholder="Enter type" value={formValues.eventType} onChange={handleChange} />
-                                            <p style={{ color: 'red' }}>{error.eventType}</p>
-
-                                        </Form.Group>
-                                    </Col>
-
-                                    <Col>
-                                        <Form.Group controlId="seats" className="mb-5">
-                                            <Form.Label className='form-event'>Total Seats <span className='span-star'>*</span></Form.Label>
-                                            <Form.Control className='form-event-control' name="totalSeats" type="text" placeholder="Total Seats" value={formValues.totalSeats} onChange={handleChange} />
-                                            <p style={{ color: 'red' }}>{error.totalSeats}</p>
-
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
-
-                                <Form.Group controlId="eventGuidelines" className="mb-5">
-                                    <Form.Label className='form-event'>Event Guidelines <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-control' as="textarea" rows={5} name="eventGuideline" placeholder="Enter guidelines" value={formValues.eventGuideline} onChange={handleChange} />
-                                    <p style={{ color: 'red' }}>{error.eventGuideline}</p>
-
-                                </Form.Group>
-
-                                <Form.Group controlId="image" className="mb-5">
-                                    <Form.Label className='form-event'>Event Image <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-control' type="file" name="imageUrl" onChange={handleChange} />
-                                    <p style={{ color: 'red' }}>{error.imageUrl}</p>
-
-                                </Form.Group>
+                                    </Form.Group>
 
 
-                            </div>
+                                    <Row>
+                                        <Col>
+                                            <Form.Group controlId="address" className="mb-3">
+                                                <Form.Label className='form-event'>Location <span className='span-star'>*</span></Form.Label>
+
+                                                <Autocomplete
+                                                    apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
+                                                    className='form-event-control form-control'
+                                                    name="location"
+
+                                                    onPlaceSelected={(place) => {
+                                                        console.log(place);
+                                                        const lat = place.geometry.location.lat(); // Get latitude
+                                                        const long = place.geometry.location.lng(); // Get longitude
+
+                                                        setFormValues((prevValues) => ({
+                                                            ...prevValues,
+                                                            location: place.formatted_address,
+                                                            lat: lat,
+                                                            long: long
+                                                        }));
+                                                    }}
+                                                />
+                                            </Form.Group>
+
+
+                                        </Col>
+
+
+
+
+
+                                    </Row>
+
+                                    <Row>
+                                        <Col>
+                                            <Form.Group controlId="eventType" className="mb-3">
+                                                <CustomInput
+                                                    type="text"
+                                                    label="Event Type"
+                                                    value={formValues.eventType}
+                                                    onChange={handleChange}
+                                                    name="eventType"
+                                                />
+                                                <p style={{ color: 'red' }}>{error.eventType}</p>
+
+                                            </Form.Group>
+                                        </Col>
+
+                                        <Col>
+                                            <Form.Group controlId="seats" className="mb-3">
+                                                <CustomInput
+                                                    type="text"
+                                                    label="Total Seats"
+                                                    value={formValues.totalSeats}
+                                                    onChange={handleChange}
+                                                    name="totalSeats"
+                                                />
+                                                <p style={{ color: 'red' }}>{error.totalSeats}</p>
+
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+
+                                    <Form.Group controlId="eventGuidelines" className="mb-3">
+                                        <CustomTextArea
+                                            label="Event Guidelines"
+                                            value={formValues.eventGuideline}
+                                            onChange={handleChange}
+                                            name="eventGuideline"
+                                        />
+
+                                        <p style={{ color: 'red' }}>{error.eventGuideline}</p>
+
+                                    </Form.Group>
+
+                                    <Form.Group controlId="image" className="mb-3">
+                                        <CustomInput
+                                            type="file"
+                                            label="Event Image"
+                                            onChange={handleChange}
+                                            name="imageUrl"
+                                        />
+
+                                        <p style={{ color: 'red' }}>{error.imageUrl}</p>
+
+                                    </Form.Group>
+
+
+                                </div>
+                            </Card>
                         </Col>
 
-                        <Col lg={6} md={12}>
-                            <div className='booking-main-head'>
-                                <div className='speaker-main-container mb-5'>
+                        <Col lg={6} md={12} >
+                            <Card>
+                                <div >
+                                    <div className='d-flex justify-content-between mb-2'>
 
-                                    <p className='event-main-heading '>Event Speaker</p>
-                                    <button type="button" onClick={addSpeaker} className="event-speaker-button mt-2">+ Add More Speaker</button>
+                                        <h3 className=' mb-3'>Event Speaker</h3>
+                                        <Button
+                                            type="button"
+                                            name=" + Add More Speaker"
+                                            onClick={addSpeaker}
+                                        />
 
-                                </div>
-                                <Form.Group controlId="speakerName" className="mb-5">
-                                    <Form.Label className='form-event'>Speaker Name <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-control' type="text" name="speakerName" onChange={handleSpeakerChange} placeholder="Enter speaker name" value={currentSpeaker.speakerName} />
-                                </Form.Group>
-
-                                <Form.Group controlId="speakerDescription" className="mb-5">
-                                    <Form.Label className='form-event'> Speaker Type <span className='span-star'>*</span></Form.Label>
-                                    <Form.Control className='form-event-control' as="textarea" rows={3} onChange={handleSpeakerChange} name="speakerType" placeholder="Enter speaker description" value={currentSpeaker.speakerType} />
-                                </Form.Group>
-
-                                <Form.Group controlId="speakerImage" className="mb-5">
-                                    <Form.Label className="form-event">
-                                        Speaker Image <span className="span-star">*</span>
-                                    </Form.Label>
-                                    <div className="custom-file-input-wrapper">
-                                        <Form.Control ref={fileInputRef} className="form-event-control custom-file-input" type="file" onChange={handleSpeakerChange} name="speakerImage" />
-                                    </div>
-                                </Form.Group>
-
-                                <div className="mt-4">
-                                    <h5 className='event-main-heading mb-4'> Speaker:</h5>
-
-                                    <div >
-
-                                        {speakers.length > 0 ? (
-                                            <CustomTable headers={headers} data={speakers} />
-                                        ) : (
-                                            <p className='noSpeaker-yet'>No speakers added yet.</p>
-                                        )}
 
                                     </div>
+                                    <Form.Group controlId="speakerName" className="mb-3">
+                                        <CustomInput
+                                            type="text"
+                                            label="Speaker Name"
+                                            value={currentSpeaker.speakerName}
+                                            onChange={handleSpeakerChange}
+                                            name="speakerName"
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="speakerDescription" className="mb-3">
+                                        <CustomTextArea
+                                            label="Speaker Type"
+                                            value={currentSpeaker.speakerType}
+                                            onChange={handleSpeakerChange}
+                                            name="speakerType"
+                                        />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="speakerImage" className="mb-3">
+                                        <Form.Label className="form-event">
+                                            Speaker Image <span className="span-star">*</span>
+                                        </Form.Label>
+                                        <div className="custom-file-input-wrapper">
+                                            <CustomInput ref={fileInputRef} className="form-event-control custom-file-input" type="file" onChange={handleSpeakerChange} name="speakerImage" />
+                                        </div>
+                                    </Form.Group>
+
+                                    <div className="mt-4">
+                                        <h3 className=' mb-4'> Speaker:</h3>
+
+                                        <div >
+
+                                            {speakers.length > 0 ? (
+                                                <CustomTable headers={headers} data={speakers} />
+                                            ) : (
+                                                <p className='noSpeaker-yet'>No speakers added yet.</p>
+                                            )}
+
+                                        </div>
+
+                                    </div>
+                                    <div className='event-button'>
+                                        <Button
+                                        onClick={handleSubmit}
+                                            type="button"
+                                            name=" Add Event"
+                                        />
+
+
+                                    </div>
 
                                 </div>
-                                <div className='event-button'>
-
-                                    <button type="submit" variant="secondary" className="event-speaker-button mt-4">Add Event</button>
-
-                                </div>
-
-                            </div>
+                            </Card>
 
                         </Col>
 

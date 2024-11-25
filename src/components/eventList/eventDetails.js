@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
-import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import map from "../../assets/map.png";
 import { eventListDetails } from "../../redux/eventSlice";
+import Button from '../button/button';
+import Card from '../card/card';
+import ProgressBarComponent from '../progressBar/progressBar';
 
-const now = 10;
+
 
 function EventDetails({ selectedCategory, calender }) {
     const navigate = useNavigate();
@@ -28,56 +29,70 @@ function EventDetails({ selectedCategory, calender }) {
     };
 
     return (
-        <div className='event-details-colors'>
+        <div className='event-details'>
             <Row>
-                {data.map((details, index) => (
-                    <Col key={index} lg={6} md={6} xs={12}>
-                        <Card style={{ marginBottom: "20px" }}>
-                            <Card.Img 
-                                variant="top" 
-                                src={`http://localhost:8000/${details.imageUrl}`} 
-                                className='card-event-image' 
-                            />
-                            <Card.Body>
-                                <div>
+                {data.map((details, index) => {
+                    const bookedSeatsCount = details.seats.filter(seat => seat.isBooked).length;
+                    return (
+
+
+                        <Col className='mb-4' key={index} lg={6} md={12} xs={12}>
+                            <Card >
+                                <img
+                                    src={`http://localhost:8000/${details.imageUrl}`}
+                                    alt="Event"
+                                    className="event-card-image"
+                                />
+
+                                <div className='mt-2'>
                                     <div className='eventlist-loc-container'>
-                                        <p className="eventlist-name">{details.eventName}</p>
-                                        <p className='eventlist-time'>{details.eventTime}</p>
+                                        <h3>{details.eventName}</h3>
+                                        <p className="eventColor">{details.eventTime}</p>
                                     </div>
                                     <div className='eventlist-loc-container'>
-                                        <p className='eventlist-location'>
+                                        <p className='eventColor'>
                                             <img src={map} alt="Map Icon" style={{ marginRight: "10px" }} />
                                             {details.location}
                                         </p>
-                                        <p className='eventlist-price'>{details.price}</p>
+                                        <h4>${details.price}</h4>
                                     </div>
-                                    <p className='eventlist-content'>{details.eventDescription}</p>
-                                    <div className='eventlist-coArtist'>
-                                        <p>Co-Artist : </p>
+                                    <h5 className='eventColor'>{details.eventDescription}</h5>
+                                    <div className='d-flex'>
+                                        <h4>Co-Artist : </h4>
                                         {details.speakers.map((speaker, speakerIndex) => (
-                                            <img 
-                                                key={speakerIndex} 
-                                                src={`http://localhost:8000/${speaker.speakerImage}`} 
-                                                className="profile-image" 
-                                                alt="Co-Artist" 
+                                            <img
+                                                key={speakerIndex}
+                                                src={`http://localhost:8000/${speaker.speakerImage}`}
+                                                className="profile-image"
+                                                alt="Co-Artist"
                                             />
                                         ))}
                                     </div>
                                     <div className='eventlist-loc-container'>
-                                        <div className='sold-price-container'>
-                                            <p className='eventlist-ticketSold'>Ticket Sold:</p>
-                                            <ProgressBar now={now} variant="warning" style={{ flexGrow: 1 }} />
+
+                                        <h4 className='eventlist-ticketSold'>Ticket Sold:</h4>
+                                        <div style={{ width: "35%" }}>
+                                            <ProgressBarComponent
+                                                data={(bookedSeatsCount / details.totalSeats) * 100}
+
+                                                variant='warning'
+                                            />
                                         </div>
-                                        <div className='sold-price-container'>
-                                            <p className='eventlist-sold-price'>560/1000</p>
-                                            <button onClick={()=>ViewDetails(details._id)} className='eventlist-button'>View Detail</button>
-                                        </div>
+
+
+
+
+                                        <p>{bookedSeatsCount}/{details.totalSeats}</p>
+                                        <Button type="Submit" name="View Detail" onClick={() => ViewDetails(details._id)} />
+
                                     </div>
                                 </div>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
+
+                            </Card>
+                        </Col>
+
+                    );
+                })}
             </Row>
         </div>
     );

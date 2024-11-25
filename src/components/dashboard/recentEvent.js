@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchTransactionList } from '../../redux/dashboardSlice';
+import Card from '../card/card';
+import ProgressBarComponent from '../progressBar/progressBar';
 
 const RecentEvent = () => {
   const dispatch = useDispatch();
@@ -16,62 +17,85 @@ const RecentEvent = () => {
   const recentEvents = Array.isArray(totalEvent.recentEvents) ? totalEvent.recentEvents : [];
 
   return (
-    <div className='recent-containers revenue-container'>
-      <div className='event-Containers'>
-        <h1 className='piechat-head'>Recent Event</h1>
-        <p>View More</p>
-      </div>
+    <div className='mb-4'>
+      <Card>
+        <div  >
+          <div className='event-Containers'>
+            <h3>Recent Event</h3>
+            <p>View More</p>
+          </div>
 
-      <div >
-        {recentEvents.map((event) => {
-          // Count booked seats
-          const bookedSeatsCount = event.seats.filter(seat => seat.isBooked).length;
+          <div className="event-height">
 
-          return (
-            <div className='recent-card' key={event._id}>
-              <div className="recent-details">
-                < img
-                  src={`http://localhost:8000/${event.imageUrl}`}
-                  alt="Event"
-                  className="recent-image"
-                />
-                <div>
-                  <h2 className="recent-title">{event.eventName}</h2>
-                  <p className="recent-location">{event.location}</p>
-                  <div className="recent-ticketInfo">
-                    <span className="recent-auto">Author: </span>
-                    <span className="recent-seller"> {event.speakers.map(speaker => speaker.speakerName).join(', ')} </span>
-                  </div>
+            {recentEvents.map((event) => {
+              // Count booked seats
+              const bookedSeatsCount = event.seats.filter(seat => seat.isBooked).length;
+
+              return (
+
+                <div className='mb-3' key={event._id}>
+                  <Card >
+                    <div className='d-flex justify-content-between'>
+                      <div className="recent-details">
+                        <img
+                          src={`http://localhost:8000/${event.imageUrl}`}
+                          alt={event.eventName}
+                          width="60px"
+                          height="60px"
+                          style={{ borderRadius: "12px" }}
+                        />
+                        <div>
+                          <h4>{event.eventName}</h4>
+                          <h5 >{event.location}</h5>
+                          <div className="d-flex gap-2">
+                            <h4 >Author: </h4>
+                            <h4> {event.speakers.map(speaker => speaker.speakerName).join(', ')} </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <p>${event.price}</p>
+                      </div>
+                    </div>
+                    <div className='upcoming-container-details'>
+                      <h4>Ticket Sold</h4>
+                      <div className='image-screen-details'>
+
+                        {event.speakers.map((speaker, speakerIndex) => (
+                          speakerIndex < 2 && (
+                            <img
+                              key={speakerIndex}
+                              src={`http://localhost:8000/${speaker.speakerImage}`}
+                              className="profile-image-event"
+                              alt="Co-Artist"
+                            />
+                          )
+                        ))}
+
+                        {event.speakers.length > 2 && (
+                          <span className="more-speakers">+{event.speakers.length - 2}</span>
+                        )}
+
+                        <p className="recent-ticketCount mt-3">{bookedSeatsCount}/{event.totalSeats}</p>
+                      </div>
+                    </div>
+
+                    <div >
+                      <ProgressBarComponent
+                        data={(bookedSeatsCount / event.totalSeats) * 100}
+                        variant='warning'
+                      />
+
+                    </div>
+
+                  </Card>
                 </div>
-              </div>
-              <div>
-                <p className="recent-price">${event.price}</p>
-                <div className='image-screen'>
 
-                  {event.speakers.map((speaker, speakerIndex) => (
-                    <img
-                      key={speakerIndex}
-                      src={`http://localhost:8000/${speaker.speakerImage}`}
-                      className="profile-image-event"
-                      alt="Co-Artist"
-                    />
-                  ))}
-                  <span className="recent-ticketCount">{bookedSeatsCount}/{event.totalSeats}</span>
-                </div>
-
-                <div className="recent-progressBar">
-                  <div className="recent-progressFill">Ticket Sold</div>
-                  <ProgressBar
-                    now={(bookedSeatsCount / event.totalSeats) * 100}
-                    variant='rgba(246, 176, 39, 1)'
-                    style={{ flexGrow: 1 }}
-                  />
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
+        </div >
+      </Card >
     </div>
   );
 };

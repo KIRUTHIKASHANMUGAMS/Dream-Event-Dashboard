@@ -1,15 +1,17 @@
 import { DatePicker, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
 import { Col, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { totalEventDashboardList } from '../../redux/dashboardSlice';
 import { eventCategoryDetails } from "../../redux/eventSlice";
+import Card from '../card/card';
+import ApexChartComponent from '../chart/chart';
+import CustomInput from '../customInput/customInput';
 
 function RadialbarChart() {
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [date, setDate] = useState(null); 
+    const [date, setDate] = useState(null);
 
     const dispatch = useDispatch();
     const categories = useSelector((state) => state.eventSlice.eventCategory) || [];
@@ -38,7 +40,7 @@ function RadialbarChart() {
         series: [ticketsSold],
         options: {
             chart: {
-               
+
                 type: 'radialBar',
             },
             plotOptions: {
@@ -92,50 +94,49 @@ function RadialbarChart() {
     };
 
     return (
-        <div className='piechat-container'>
-            <div className='event-Containers'>
-                <h1 className='piechart-head'>Best Selling</h1>
-                <Form>
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="formGridState">
-                                <Form.Control
-                                    as="select"
-                                    className='form-event-control'
+        <div className='mb-4'>
+            <Card>
+                <div className='event-Containers'>
+
+                    <h3>Best Selling</h3>
+                    <Form>
+                        <Row>
+                            <Col>
+                            <CustomInput
+                                    type="dropdown"
+                                    options={categories}
+                                    value={selectedCategory}
                                     onChange={handleCategoryChange}
-                                    name='eventcategory'
-                                >
-                                    <option value="">Select category</option>
-                                    {categories.map((category) => (
-                                        <option key={category._id} value={category._id}>
-                                            {category.name}
-                                        </option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group>
-                        </Col>
-                        <Col>
-                            <Space direction="vertical">
-                                <DatePicker className='form-event-control' onChange={onChange} picker="month" />
-                            </Space>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-            <div className='event-Containers mt-5'>
-                <div>
-                    <h1 className='radialbar-head'>Ticket Sold</h1>
-                    <ReactApexChart options={dataSold.options} series={dataSold.series} type="radialBar" height={350} />
+                                />
+                            
+                           
+                            </Col>
+                            <Col>
+                                <Space direction="vertical">
+                                    <DatePicker className="form-control"  onChange={onChange} picker="month" />
+                                </Space>
+                            </Col>
+                        </Row>
+                    </Form>
+
                 </div>
-                <div>
-                    <h1 className='radialbar-head'>Tickets Left</h1>
-                    <ReactApexChart options={dataLeft.options} series={dataLeft.series} type="radialBar" height={350} />
+                <div className='event-Containers mt-5'>
+                    <div className='radialChart'>
+                        <h3 className='text-center'>Ticket Sold</h3>
+
+                        <ApexChartComponent options={dataSold.options} series={dataSold.series} type="radialBar" height={350} />
+                    </div>
+                    <div  className='radialChart'>
+                    <h3 className='text-center'>Tickets Left</h3>
+
+                        <ApexChartComponent options={dataLeft.options} series={dataLeft.series} type="radialBar" height={350} />
+                    </div>
+                    <div  className='radialChart'>
+                        <h3 className='text-center'>Events Held</h3>
+                        <ApexChartComponent options={dataHeld.options} series={dataHeld.series} type="radialBar" height={350} />
+                    </div>
                 </div>
-                <div>
-                    <h1 className='radialbar-head'>Events Held</h1>
-                    <ReactApexChart options={dataHeld.options} series={dataHeld.series} type="radialBar" height={350} />
-                </div>
-            </div>
+            </Card>
         </div>
     );
 }

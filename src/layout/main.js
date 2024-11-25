@@ -9,7 +9,6 @@ import Sidenav from "./sidebar";
 const LayoutContainer = styled.div`
   display:flex;
 
-
    @media (max-width: 1300px) {
    display:block;
      height: 100vh;
@@ -47,7 +46,7 @@ const ContentContainer = styled.div`
 
 const HeaderContainer = styled.header`
   background: #fff;
-  padding: 20px;
+  padding: 10px;
   position: fixed;
   width: 100%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -56,9 +55,9 @@ const HeaderContainer = styled.header`
 
 const Content = styled.main`
   flex: 1;
-  padding: 147px 10px 20px;
+  padding: 110px 10px 20px;
   background-color: rgba(255, 252, 246, 1);
-  overflow-y: auto;
+  
 `;
 
 function Main({ children }) {
@@ -87,7 +86,7 @@ function Main({ children }) {
   };
 
   useEffect(() => {
-    setIsOpen(false); // Close sidebar on route change
+    setIsOpen(false);
 
   }, [location]);
 

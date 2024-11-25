@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import ReactApexChart from 'react-apexcharts';
 import { Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
+import ApexChartComponent from "../../components/chart/chart";
 import { fetchTransactionList, totalTicketDashboardList } from '../../redux/dashboardSlice';
+import Card from '../card/card';
+import ChartLabel from '../chart/chartLabel';
 
 function PolarChart() {
     const dispatch = useDispatch();
-    
+
     const datas = useSelector((state) => state.dashboardSlice.dashboardList) || {};
     const totalEvent = useSelector((state) => state.dashboardSlice.totalTicketDashboard) || {};
 
@@ -25,7 +27,7 @@ function PolarChart() {
             datas.totalUsers || 0,
             datas.totalEvents || 0,
             totalEvent.totalTickets || 0,
-            totalEvent.ticketsLeft || 0 
+            totalEvent.ticketsLeft || 0
         ],
         options: {
             chart: {
@@ -44,9 +46,9 @@ function PolarChart() {
                 show: false,
             },
             colors: [
-                'rgba(36, 90, 224, 1)', 
-                'rgba(216, 33, 72, 1)', 
-                'rgba(1, 200, 151, 1)', 
+                'rgba(36, 90, 224, 1)',
+                'rgba(216, 33, 72, 1)',
+                'rgba(1, 200, 151, 1)',
                 'rgba(0, 30, 108, 1)'
             ],
             labels: ['New Registration', 'New Event', 'Ticket Sold', 'Total Unsold'],
@@ -65,41 +67,49 @@ function PolarChart() {
     };
 
     return (
-        <div className='polar-container'>
-            <div className='event-container'>
-                <h1 className='piechart-head'>Overview</h1>
-            </div>
-            <div className='event-container'>
-                <ReactApexChart options={data.options} series={data.series} type="polarArea" height="357px" />
-                <div style={{ marginTop: '52px' }}>
-                    <Row>
-                        <Col lg="6">
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                <div style={{ backgroundColor: '#003DA5', width: '20px', height: '20px', marginRight: '10px', borderRadius: "50%" }}></div>
-                                <span style={{ fontWeight: '600' }}>User Registration</span>
-                            </div>
-                        </Col>
-                        <Col lg="6">
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                <div style={{ backgroundColor: '#00E396', width: '20px', height: '20px', marginRight: '10px', borderRadius: "50%" }}></div>
-                                <span style={{ fontWeight: '600' }}>Total Event</span>
-                            </div>
-                        </Col>
-                        <Col lg="6">
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                <div style={{ backgroundColor: '#FF4560', width: '20px', height: '20px', marginRight: '10px', borderRadius: "50%" }}></div>
-                                <span style={{ fontWeight: '600' }}>Ticket Sold</span>
-                            </div>
-                        </Col>
-                        <Col lg="6">
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={{ backgroundColor: '#000000', width: '20px', height: '20px', marginRight: '10px', borderRadius: "50%" }}></div>
-                                <span style={{ fontWeight: '600' }}>Total Unsold</span>
-                            </div>
-                        </Col>
-                    </Row>
+        <div className='mb-4'>
+
+      
+        <Card>
+            <div >
+
+                <h3 >Overview</h3>
+
+                <div className='event-container'>
+                    <ApexChartComponent options={data.options} series={data.series} type="polarArea" height="260px" />
+                    <div>
+                        <Row>
+                            <Col lg="6" md="6">
+                    
+                                <ChartLabel title="User Registration" className={["polar-name-register", "polar-chart-details"]}  />
+                                    
+                
+                            </Col>
+                            <Col lg="6" md="6">
+                               
+                                <ChartLabel title="Total Event" className={["polar-name-event", "polar-chart-details"]}  />
+
+                           
+                            </Col>
+                            <Col lg="6" md="6">
+                     
+                                <ChartLabel title="Total Sold" className={["polar-name-sold", "polar-chart-details"]}  />
+
+             
+                              
+                            </Col>
+                            <Col lg="6" md="6">
+                              
+                                <ChartLabel title="Total Unsold" className={["polar-name-unsold", "polar-chart-details"]}  />
+
+              
+                              
+                            </Col>
+                        </Row>
+                    </div>
                 </div>
             </div>
+        </Card>
         </div>
     );
 }

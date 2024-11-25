@@ -20,12 +20,12 @@ function EventList() {
               {view === 'dashboard' &&
           <Row>
 
-            <Col lg={8} md={12}>
+            <Col lg={8} md={6}>
 
               <EventDetails   selectedCategory={selectedCategory} calender={calender} />
 
             </Col>
-            <Col lg={4} md={12}>
+            <Col lg={4} md={6}>
               <Calender  setCalender={setCalender} />
             </Col>
           </Row>
@@ -35,12 +35,12 @@ function EventList() {
         <Container fluid>
           <Row>
 
-            <Col lg="9" md={12}>
+            <Col lg={8} md={6}>
 
             <TableEvent selectedCategory={selectedCategory} calender={calender} />
 
             </Col>
-            <Col lg="3" md={12}>
+            <Col lg={4} md={6}>
               <Calender   setCalender={setCalender}/>
             </Col>
           </Row>

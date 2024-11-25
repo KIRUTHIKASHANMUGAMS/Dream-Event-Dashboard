@@ -8,13 +8,7 @@ p {
     margin: 0px;
 }
 
-.logoContainer {
-    justify-content: "center";
-    display: flex;
-    align-items: center;
-    align-content: center;
 
-}
 
 .logo-content {
     padding-left: 10px;
@@ -47,11 +41,7 @@ p {
     align-items: center;
 }
 
-.logo {
-    width: 50px;
-    /* Adjust size as needed */
-    height: auto;
-}
+
 
 .logoText {
     font-size: 24px;
@@ -446,13 +436,7 @@ color: rgba(117, 117, 117, 1);
     margin-bottom: 24px;
 }
 
-.progress-circle {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
-}
 
 .ticket-icon {
     position: absolute;
@@ -620,12 +604,6 @@ color: rgba(117, 117, 117, 1);
 
 }
 
-.calender-event {
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
 
 
 :where(.css-dev-only-do-not-override-1hpnbz2).ant-picker-calendar .ant-picker-panel {
@@ -679,11 +657,9 @@ color: rgba(117, 117, 117, 1);
 .recent-image {
     width: 67px;
     height: 67px;
-
     gap: 0px;
     border-radius: 12px 0px 0px 0px;
     opacity: 0px;
-
 
 }
 
@@ -893,10 +869,6 @@ color: rgba(117, 117, 117, 1);
     padding: 10px;
     border: 1px solid rgba(240, 242, 245, 1);
     background-color: #fff;
-
-
-
-
 
 }
 
@@ -1552,14 +1524,7 @@ color: rgba(117, 117, 117, 1);
 }
 
 .header-owner {
-
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 16px;
-    text-align: left;
     color: rgba(117, 117, 117, 1);
-
-
 }
 
 .location-details {

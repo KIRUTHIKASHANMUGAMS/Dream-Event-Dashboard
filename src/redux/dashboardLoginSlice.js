@@ -17,15 +17,10 @@ export const dashboardLoginListDetails = (details) =>
             const response = await axios.post(config.dashboardlogin, details);
             dispatch(dashboardLoginList({ dashboardLoginList: response.data }));
         
-            toast.success("Event created successfully!", {
-                display: 'flex',
-                toastId: 'user-action',
-                autoClose: 2000,
-                closeOnClick: true,
-                pauseOnHover: true,
-                toastClassName: 'custom-toast',
-                bodyClassName: 'custom-toast',
-            });
+          
+            return response.data; 
+      
+      
         
         } catch (error) {
 

@@ -5,20 +5,19 @@ import SubMenu from "./subMenu";
 
 const SidebarNav = styled.nav`
   background: #fffefe;
-  width: 280px; // Increased width for better spacing
-  height: 100vh; // Full height
-  display: flex;
+  width: 280px; 
+  height: 100vh; 
   z-index:1;
 
   flex-direction: column;
-  position: fixed; // Fixed position
-  top: 91px;
+  position: fixed;
+  top: 70px;
   left: 0;
   padding: 25px;
   border-radius: 0 12px 12px 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
 
-  /* Scrollbar styles */
+
   ::-webkit-scrollbar {
     width: 6px;
   }

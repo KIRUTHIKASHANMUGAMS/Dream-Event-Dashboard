@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { eventListDetails } from "../../redux/eventSlice";
+import Card from '../card/card';
 import CustomTable from '../table/customTable';
 
 const TableEvent = ({selectedCategory ,calender}) => {
@@ -34,7 +35,7 @@ const TableEvent = ({selectedCategory ,calender}) => {
       price: event.price,
       location: event.location,
       totalSeats: event.totalSeats,
-      eventGuideline: event.eventGuideline,
+    
       // speakerName: speaker.speakerName,
       // speakerType: speaker.speakerType,
       // speakerImage:<img src={`http://localhost:8000/${speaker.speakerImage}`}  width="50px"  height="50px" />
@@ -53,19 +54,18 @@ const TableEvent = ({selectedCategory ,calender}) => {
     'location',
     'eventImage',
     'totalSeats',
-    'eventGuideline',
-    // 'speakerName',
-    // 'speakerType',
-    // 'speakerImage'
+    
   ];
 
   return (
-    <div className='booking-main-head'>
+    <div className='mb-4'>
+      <Card>
       {flattenedData.length > 0 ? (
         <CustomTable headers={headers} data={flattenedData} rowsPerPage={5} />
       ) : (
         <p>No events available.</p>
       )}
+      </Card>
     </div>
   );
 };

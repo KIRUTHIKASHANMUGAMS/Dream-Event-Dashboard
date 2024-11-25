@@ -1,11 +1,12 @@
-
-
-
 import React, { useEffect, useState } from "react";
+import Toast from 'react-bootstrap/Toast';
+import { CgProfile } from "react-icons/cg";
+import { MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
+import Cookies from "universal-cookie";
 
-import bell from "../assets/bell.png";
-import gift from "../assets/gift.png";
+import Gift from "../assets/icons/gift.svg";
+import Notification from "../assets/icons/notification.svg";
 import logo from "../assets/logo.png";
 import profile from "../assets/Profile.png";
 import search from "../assets/search.png";
@@ -26,6 +27,9 @@ const ToggleButton = styled.button`
 
 function Header({ toggleSidebar, isOpen }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1330);
+  const [show, setShow] = useState(false); // Corrected state declaration
+  const cookies = new Cookies(null, { path: "/" });
+  const handleShow = () => setShow(prev => !prev); // Toggle show state
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,20 +37,28 @@ function Header({ toggleSidebar, isOpen }) {
     };
 
     window.addEventListener("resize", handleResize);
-
-    // Cleanup the event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
+  const handleLogout = () => {
+
+    cookies.remove('refreshToken');
+    cookies.remove('token');
+    cookies.remove('user');
+    window.location.href = '/';
+  
+  };
+
+
   return (
     <div className="headerContainer">
       <div className="logoContainer">
         <img src={logo} alt="logo" className="logo" />
-        <span className="logo-content"> Dream Event</span>
+        <h1> Dream Event</h1>
       </div>
-    
+
       <div className="profile-container">
         <div className="wrapper">
           <div className="icon"><img src={search} alt="search" /></div>
@@ -55,30 +67,50 @@ function Header({ toggleSidebar, isOpen }) {
         <div className="userOptions">
           <img src={unitedState} alt="united" />
           <select>
-            <option className="language" value="en">ENGLISH</option>
+            <option value="en">ENGLISH</option>
           </select>
         </div>
-        <img src={bell} alt="bell" />
-        <img src={gift} alt="gift" />
+        <div className="imageBorder"><img src={Gift} alt="gift" width="24px" height="24px" /></div>
+        <div className="imageBorder"><img src={Notification} alt="notification" width="24px" height="24px" /></div>
+
         {isMobile && (
-        <ToggleButton
-          onClick={toggleSidebar}
-          aria-expanded={isOpen}
-          id="toggle-button"
-          aria-controls="sidebar"
-        >
-          {isOpen ? "✖" : "☰"}
-        </ToggleButton>
-      )}
-        <div className="userInfo">
-          <img src={profile} alt="User Icon" />
-          <div className="profile-content">
-            <span className="userName">Minato Namikaze</span>
-            <p className="header-owner">Owner</p>
+          <ToggleButton
+            onClick={toggleSidebar}
+            aria-expanded={isOpen}
+            id="toggle-button"
+            aria-controls="sidebar"
+          >
+            {isOpen ? "✖" : "☰"}
+          </ToggleButton>
+        )}
+
+        <img src={profile} alt="User Icon" width="50px" height="50px" />
+        <div>
+          <div className="profile-content d-flex align-items-center gap-3" onClick={handleShow}>
+            <div>
+            
+              <h3>Minato Namikaze</h3>
+              <p className="header-owner">Owner</p>
+            </div>
+       
+          <div className="event-icons" ></div>
           </div>
-          <div className="event-icons"></div>
         </div>
+
       </div>
+
+      <Toast show={show} onClose={handleShow} style={{ position: 'absolute', top: '70px', right: '15px', width: "10%", padding: "20px" }}>
+        <Toast.Body style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div className="d-flex align-items-center gap-3">
+            <CgProfile size={18} />
+            <h4 style={{ margin: 0 }}>Profile</h4>
+          </div>
+          <div className="d-flex align-items-center gap-3" onClick={handleLogout}>
+            <MdOutlineLogout size={18} />
+            <h4 style={{ margin: 0 }}>Logout</h4>
+          </div>
+        </Toast.Body>
+      </Toast>
     </div>
   );
 }

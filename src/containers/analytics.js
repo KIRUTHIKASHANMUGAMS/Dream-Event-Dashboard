@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
-//import DonutChart from '../components/analytics/donutChart';
+import DonutChart from '../components/analytics/donutChart';
 import LineChart from '../components/analytics/lineChart';
 import PolarChart from "../components/analytics/polarChat";
 import RadialbarChart from '../components/analytics/radialBarChart';
@@ -14,10 +14,10 @@ function analytics() {
         <div>
             <Container fluid>
                 <Row>
-                    <Col lg={4}>
+                    <Col xxl={4} xl={5} lg={5} >
                         <PolarChart />
                     </Col>
-                    <Col lg={8}>
+                    <Col xxl={8} xl={7} lg={7}>
 
                         <LineChart />
 
@@ -26,13 +26,13 @@ function analytics() {
                 </Row>
 
                 <Row>
-                    <Col lg="12">
+                    <Col lg={8}>
                         <RadialbarChart />
                     </Col>
 
-                    {/* <Col lg="4">
+                    <Col lg={4}>
                         <DonutChart />
-                    </Col> */}
+                    </Col>
                 </Row>
                 <Row>
                     <Col lg={6}>
@@ -40,7 +40,7 @@ function analytics() {
 
                     </Col>
                     <Col lg={6}>
-                    <TicketSales/>
+                        <TicketSales />
                     </Col>
                 </Row>
 

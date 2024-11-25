@@ -1,9 +1,10 @@
 import { DatePicker, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-import Chart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { salesRevenueList } from '../../redux/dashboardSlice';
+import Card from '../card/card';
+import ApexChartComponent from '../chart/chart';
 
 const CandlestickChart = () => {
     const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const CandlestickChart = () => {
 
     const options = {
         chart: {
-            type: 'candlestick',
+            type: 'line',
             height: 350,
             toolbar: { show: false },
         },
@@ -62,7 +63,7 @@ const CandlestickChart = () => {
             style: {
                 fontSize: '16px',
                 fontWeight: 'bold',
-                color: '#333',
+                color: '#e0e0e0',
             },
         },
         xaxis: {
@@ -85,37 +86,42 @@ const CandlestickChart = () => {
             y: { formatter: (val) => `${val} K` },
         },
         plotOptions: {
-            candlestick: {
-                colors: {
-                    upward: '#FFD700',
-                    downward: '#FF4500',
-                },
+            line: {
+                colors: 'rgba(246, 176, 39, 1)', // Set the desired color here
             },
         },
         grid: {
-            borderColor: '#e0e0e0',
+            borderColor: 'rgba(246, 176, 39, 1)',
             strokeDashArray: 4,
         },
     };
 
     return (
-        <div>
-            <div className="total-ticket-container">
+        <div className='mb-4'>
+            <Card>
+            <div >
                 <div className='event-Containers'>
-                    <h1 className='piechat-head'>Sales Revenue</h1>
+                    <h3>Sales Revenue</h3>
                     <Space direction="vertical">
                         <DatePicker className='form-event-control' onChange={onChange} picker="year" />
                     </Space>
                 </div>
                 {series[0]?.data?.length > 0 ? (
-                    <Chart options={options} series={series} type="candlestick" height={350} />
+                  <ApexChartComponent
+                  type="line"
+                  series={series}
+                  options={options}
+                  height={250}
+              />
+                    
                 ) : (
-                    <p>No event</p>
+                    <div className='NoEventList'>No Revenue available.</div>
                 )}
 
 
 
             </div>
+            </Card>
         </div>
     );
 };

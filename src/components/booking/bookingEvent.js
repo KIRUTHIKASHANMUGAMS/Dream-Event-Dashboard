@@ -2,21 +2,22 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { bookingListDetails } from "../../redux/bookingSlice";
+import Card from '../card/card';
 import CustomTable from '../table/customTable';
 
-const TableEvent = ({ selectedCategory ,date}) => {
+const TableEvent = ({ selectedCategory, date }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.bookingSlice.bookingList) || [];
 
   useEffect(() => {
     const fetchData = async () => {
-      await dispatch(bookingListDetails(selectedCategory ,date));
+      await dispatch(bookingListDetails(selectedCategory, date));
     };
     fetchData();
-  }, [dispatch, selectedCategory , date]);
+  }, [dispatch, selectedCategory, date]);
 
-  const flattenedData = data.flatMap((event, index)  => ({
-    SNo:index+1,
+  const flattenedData = data.flatMap((event, index) => ({
+    SNo: index + 1,
     eventName: event.eventName,
     customerName: event.customerName,
     location: event.location,
@@ -59,20 +60,22 @@ const TableEvent = ({ selectedCategory ,date}) => {
   );
 
   return (
-    <div className='booking-main-head'>
-      {flattenedData.length > 0 ? (
-        <CustomTable
-          headers={headers}
-          data={flattenedData}
-          rowsPerPage={5}
-          renderCell={(header, value) =>
-            header === 'status' ? renderStatus(value) : value
-          }
-        />
-      ) : (
-        <p>No events available.</p>
-      )}
-    </div>
+    <Card>
+      <div className='booking-main-head'>
+        {flattenedData.length > 0 ? (
+          <CustomTable
+            headers={headers}
+            data={flattenedData}
+            rowsPerPage={5}
+            renderCell={(header, value) =>
+              header === 'status' ? renderStatus(value) : value
+            }
+          />
+        ) : (
+          <div className='no-details NoEventList'>  <p>No events available.</p> </div>
+        )}
+      </div>
+    </Card>
   );
 };
 

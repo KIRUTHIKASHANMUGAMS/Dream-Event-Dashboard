@@ -20,6 +20,8 @@ const SidebarLink = styled(Link)`
     font-weight: bold; 
     padding: 12px 24px;
     border-radius: 10px;
+    color: rgba(18, 18, 18, 1);
+
   }
 `;
 
@@ -28,14 +30,13 @@ const SidebarLabel = styled.span`
   position: relative;
   top: 2px;
   font-family: outfit;
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 34px;
+  color: rgba(117, 117, 117, 1);
   text-align: left;
 
-  @media (max-width: 1420px) {
-    font-size: 16px;
-  }
+
 `;
 
 const DropdownLink = styled(Link)`
@@ -45,7 +46,6 @@ const DropdownLink = styled(Link)`
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: black;
 
   &:hover {
     cursor: pointer;
@@ -55,6 +55,8 @@ const DropdownLink = styled(Link)`
     background: rgba(246, 176, 39, 0.8); 
     font-weight: bold;   
     padding: 12px 24px;
+    color: rgba(18, 18, 18, 1);
+
     border-radius: 10px;
   }
 `;

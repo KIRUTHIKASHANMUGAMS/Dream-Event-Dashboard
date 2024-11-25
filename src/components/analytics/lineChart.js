@@ -1,103 +1,133 @@
 import { DatePicker, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { Col, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { salesRevenueList } from '../../redux/dashboardSlice';
+import Card from '../card/card';
+import ApexChartComponent from '../chart/chart';
 
-function LineChart() {
+const CandlestickChart = () => {
     const dispatch = useDispatch();
     const totalEvent = useSelector((state) => state.dashboardSlice.salesRevenue) || [];
     const [series, setSeries] = useState([]);
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState([])
 
     useEffect(() => {
         dispatch(salesRevenueList(date));
     }, [dispatch, date]);
 
-    const onChange = (date, dateString) => {
-        setDate(dateString);
-    };
-
     useEffect(() => {
+        if (!Array.isArray(totalEvent)) {
+            console.error('Expected totalEvent to be an array:', totalEvent);
+            return;
+        }
 
-        const prices = totalEvent.map(event => event.totalPrice);
-        const dates = totalEvent.map(event => `${event.year}-${String(event.month).padStart(2, '0')}-01`);
 
-        setSeries([{
-            name: "Sales Revenue",
-            data: prices
-        }]);
 
-        // Update the options for the chart
-        setData(prevData => ({
-            ...prevData,
-            options: {
-                ...prevData.options,
-                xaxis: {
-                    categories: dates,
-                    type: 'datetime',
-                }
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const monthData = Array(12).fill(0);
+
+        totalEvent.forEach(item => {
+            if (item.month && item.totalPrice !== undefined) {
+                const monthIndex = item.month - 1;
+                monthData[monthIndex] = item.totalPrice;
+            } else {
+                console.warn('Invalid item structure:', item);
             }
+        });
+        const transformedData = months.map((month, index) => ({
+            x: month,
+            y: [monthData[index] || 0, monthData[index] || 0, monthData[index] || 0, monthData[index] || 0] // Ensure fallback is 0
         }));
 
+
+        setSeries([{ data: transformedData }]);
     }, [totalEvent]);
 
-    const [data, setData] = useState({
-        series: [],
-        options: {
-            chart: {
-                type: 'area',
-                height: 350,
-                zoom: {
-                    enabled: false
-                }
+
+
+    const onChange = (date, dateString) => {
+
+        setDate(dateString)
+    };
+
+    const options = {
+        chart: {
+            type: 'line',
+            height: 350,
+            toolbar: { show: false },
+        },
+        title: {
+            text: 'Sales Revenue',
+            align: 'left',
+            style: {
+                fontSize: '16px',
+                fontWeight: 'bold',
+                color: '#e0e0e0',
             },
-            dataLabels: {
-                enabled: false
+        },
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // Static month labels
+            labels: {
+                rotate: -45,
             },
-            stroke: {
-                curve: 'smooth'
+        },
+        yaxis: {
+            title: { text: 'Sales Revenue (in K)' },
+            tooltip: { enabled: true },
+        },
+        tooltip: {
+            shared: true,
+            intersect: false,
+            style: { fontSize: '12px' },
+            x: {
+                formatter: (val) => val,
             },
-            colors: ['rgba(246, 176, 39, 1)'],
-            xaxis: {
-                categories: [],
-                type: 'datetime',
+            y: { formatter: (val) => `${val} K` },
+        },
+        plotOptions: {
+            line: {
+                colors: 'rgba(246, 176, 39, 1)', // Set the desired color here
             },
-            yaxis: {
-                opposite: true
-            },
-            legend: {
-                horizontalAlign: 'left'
-            }
-        }
-    });
+        },
+        grid: {
+            borderColor: 'rgba(246, 176, 39, 1)',
+            strokeDashArray: 4,
+        },
+    };
 
     return (
-        <div className='linechart-container ' style={{height:"560px"}}>
-            <div className='event-Containers'>
-                <h1 className='piechart-head'>Sales Revenue</h1>
-                <Form>
-                    <Row>
-                        <Col>
+        <div className='mb-4'>
+
+
+            <div className="event-height">
+                <Card>
+                    <div >
+                        <div className='event-Containers'>
+                            <h3>Sales Revenue</h3>
                             <Space direction="vertical">
                                 <DatePicker className='form-event-control' onChange={onChange} picker="year" />
                             </Space>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-            <div className='event-containers'>
-                {totalEvent.length > 0 ? (
-                    <ReactApexChart options={data.options} series={series} type="area" height="480px" />
-                ) : (
-                    <div style={{textAlign:"center", padding:'30px'}}>No Revenue</div>
-                )}
+                        </div>
+                        {series[0]?.data?.length > 0 ? (
+                            <ApexChartComponent
+                                type="line"
+                                series={series}
+                                options={options}
+                                height={270}
+                            />
 
-            </div>
-        </div>
+                        ) : (
+                            <div className='NoEventList'>No Revenue available.</div>
+                        )}
+
+
+
+                    </div>
+                </Card>
+            </div>  </div>
+
     );
-}
+};
 
-export default LineChart;
+export default CandlestickChart;

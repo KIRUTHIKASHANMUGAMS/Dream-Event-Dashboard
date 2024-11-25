@@ -1,10 +1,10 @@
 import "./App.css";
-import "./stylesheets/style.css";
-import "./stylesheets/responsive.css";
+import './stylesheets/style.scss';
 
 import React from "react";
-import {Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
+import { UserProvider } from "./components/context/userContext"
 import ViewDetails from "./components/eventList/viewDetails";
 import Login from "./components/login/login";
 import Analytics from "./containers/analytics";
@@ -23,22 +23,22 @@ function App() {
   return (
     <div className="App">
       <Routes>
-    
-        <Route path="/" element={<Login />} />
 
-        
-    
-            <Route path="dashboard" element={<Main><Dashboard /></Main>} />
-            <Route path="eventList" element={<Main><EventList /></Main>} />
-            <Route path="createEvent" element={<Main><CreateEvent /></Main>} />
-            <Route path="booking" element={<Main><Booking /></Main>} />
-            <Route path="viewDetails/:id" element={<Main><ViewDetails /></Main>} />
-            <Route path="customer" element={<Main><Customer /></Main>} />
-            <Route path="transaction" element={<Main><Transaction /></Main>} />
-            <Route path="settings" element={<Main><Setting /></Main>} />
-            <Route path="analytics" element={<Main><Analytics /></Main>} />
-      
-        
+        <Route path="/" element={<UserProvider><Login /></UserProvider>} />
+
+
+
+        <Route path="dashboard" element={<Main><Dashboard /></Main>} />
+        <Route path="eventList" element={<Main><EventList /></Main>} />
+        <Route path="createEvent" element={<Main><CreateEvent /></Main>} />
+        <Route path="booking" element={<Main><Booking /></Main>} />
+        <Route path="viewDetails/:id" element={<Main><ViewDetails /></Main>} />
+        <Route path="customer" element={<Main><Customer /></Main>} />
+        <Route path="transaction" element={<Main><Transaction /></Main>} />
+        <Route path="settings" element={<Main><Setting /></Main>} />
+        <Route path="analytics" element={<Main><Analytics /></Main>} />
+
+
       </Routes>
     </div>
   );

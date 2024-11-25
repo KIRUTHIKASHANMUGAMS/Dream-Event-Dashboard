@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import Cookies from "universal-cookie";
 
-import google from "../../assets/google.png";
+//import google from "../../assets/google.png";
 import logo from "../../assets/logo.png";
-import { dashboardLoginListDetails } from '../../redux/dashboardLoginSlice';
+import { UserContext } from "../context/userContext";
+import { loginResponse } from "../server/login";
 
 function Login() {
-  const dispatch = useDispatch();
+
   const [formValues, setFormValues] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
-  const data = useSelector((state) => state.dashboardLoginSlice.dashboardLoginList) || {};
-  
+  const { setUser } = useContext(UserContext);
+    const cookies = new Cookies(null, { path: "/" });
+
+
+
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -32,15 +37,24 @@ function Login() {
     };
 
     try {
-      await dispatch(dashboardLoginListDetails(details));
-      if (data.status === 200) {
-        console.log("Login successful");
-        navigate('/dashboard');
-      } else {
-        toast.error("Login failed. Please check your credentials.");
-      }
+      const response = await loginResponse(details);
+      setUser(response.data);
+      const token = response.data.accessToken;
+      const refreshToken = response.data.refreshToken;
+      const user = response?. data?.user?._id;
+      cookies.set("user", user);
+      cookies.set("token", token);
+      cookies.set("refreshToken", refreshToken)
+     
+      toast.success("Login Successfully")
+
+      setTimeout(() => {
+        navigate("/dashboard");
+    }, 3000);
+      
+
     } catch (error) {
-      toast.error("An error occurred. Please try again.");
+      toast.error( error.message);
     } finally {
       setLoading(false);
     }
@@ -74,24 +88,24 @@ function Login() {
             <Form style={{ marginTop: '30px' }} onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formEmail">
                 <Form.Label className='form-login'>Email <span className='span-star'>*</span></Form.Label>
-                <Form.Control 
-                  type="email" 
-                  name="email" 
-                  onChange={handleChange} 
-                  className='form-event-control' 
-                  placeholder="user@example.com" 
-                  required 
+                <Form.Control
+                  type="email"
+                  name="email"
+                  onChange={handleChange}
+                  className='form-event-control'
+                  placeholder="user@example.com"
+                  required
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formPassword">
                 <Form.Label className='form-login'>Password <span className='span-star'>*</span></Form.Label>
-                <Form.Control 
-                  type="password" 
-                  name="password" 
-                  onChange={handleChange} 
-                  className='form-event-control' 
-                  placeholder="Password" 
-                  required 
+                <Form.Control
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                  className='form-event-control'
+                  placeholder="Password"
+                  required
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formCheckbox">
@@ -101,13 +115,13 @@ function Login() {
                 <Button variant="warning" type="submit" className="sign-in-btn" disabled={loading}>
                   {loading ? 'Signing In...' : 'Sign In'}
                 </Button>
-                <Button variant="outline-danger" type="button" className="google-btn"> 
+                {/* <Button variant="outline-danger" type="button" className="google-btn">
                   <img src={google} width="24px" height="24px" alt='google-icon' /> Sign in with Google
-                </Button>
+                </Button> */}
               </div>
-              <p className="text-center account-event mt-3">
+              {/* <p className="text-center account-event mt-3">
                 Don't have an account? <a className='sign-up' href="/signup">Sign up</a>
-              </p>
+              </p> */}
             </Form>
           </Col>
         </Row>

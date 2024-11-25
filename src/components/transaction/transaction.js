@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchTransactionList } from '../../redux/transactionSlice';
+import Card from '../card/card';
 import CustomTable from '../table/customTable';
 
 const TableEvent = ({ selectedCategory, date }) => {
@@ -64,6 +65,7 @@ const TableEvent = ({ selectedCategory, date }) => {
   );
 
   return (
+    <Card>
     <div className='booking-main-head'>
       {flattenedData.length > 0 ? (
         <CustomTable
@@ -75,9 +77,10 @@ const TableEvent = ({ selectedCategory, date }) => {
           }
         />
       ) : (
-        <p>No transactions available.</p>
+        <div className='no-details NoEventList'><p>No transactions available.</p> </div>
       )}
     </div>
+    </Card>
   );
 };
 

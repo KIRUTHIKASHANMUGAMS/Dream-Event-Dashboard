@@ -1,10 +1,13 @@
 import React from 'react';
-import ReactApexChart from 'react-apexcharts';
+
+import Card from '../card/card';
+import ApexChartComponent from '../chart/chart';
+
 
 // Sample data structure
 const series = {
     monthDataSeries1: {
-        prices: [30, 40, 35, 50, 49, 60, 70, 91, 125], // Example prices
+        prices: [30, 40, 35, 50, 49, 60, 70, 91, 125], 
         dates: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-06', '2023-01-07', '2023-01-08', '2023-01-09']
     }
 };
@@ -12,7 +15,7 @@ const series = {
 const data = {
     series: [{
         name: "STOCK ABC",
-        data: series.monthDataSeries1.prices // Correctly accessing the prices
+        data: series.monthDataSeries1.prices 
     }],
     options: {
         chart: {
@@ -73,9 +76,12 @@ const data = {
 
 function AreaChart() { // Renamed to reflect the chart type
     return (
-        <div className='piechart-container'>
-            <div className='event-containers'>
-                <ReactApexChart options={data.options} series={data.series} type="area" />
+        <div>
+            <div className='mb-4'>
+                <Card>
+                <ApexChartComponent options={data.options} series={data.series} type="area"    height={350} />
+                </Card>
+           
             </div>
         </div>
     );

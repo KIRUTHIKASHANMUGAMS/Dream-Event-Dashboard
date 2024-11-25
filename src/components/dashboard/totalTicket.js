@@ -1,13 +1,16 @@
 import 'react-circular-progressbar/dist/styles.css';
 
 import React, { useEffect, useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { PiTicket } from "react-icons/pi";
 import { useDispatch, useSelector } from 'react-redux';
 
+import ApexChartComponent from "../../components/chart/chart";
 import { totalTicketDashboardList } from '../../redux/dashboardSlice';
 import { eventCategoryDetails } from "../../redux/eventSlice";
+import Card from '../card/card';
+import ChartLabel from '../chart/chartLabel';
+import CustomInput from '../customInput/customInput';
 
 function TotalTicket() {
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -23,10 +26,9 @@ function TotalTicket() {
 
     const totalTickets = totalEvent.ticketsSold + totalEvent.ticketsLeft || 0;
     const soldPercentage = totalTickets > 0 ? (totalEvent.ticketsSold / totalTickets) * 100 : 0;
-   // const unsoldPercentage = totalTickets > 0 ? (totalEvent.ticketsLeft / totalTickets) * 100 : 0;
 
     const data = {
-        series: [soldPercentage ], // Series for sold and unsold
+        series: [soldPercentage],
         options: {
             chart: {
                 height: 350,
@@ -72,50 +74,51 @@ function TotalTicket() {
     };
 
     return (
-        <div >
-            <div>
-                <Row style={{alignItems:"center"}}>
-                    <Col>
-                        <h1 className='piechat-head'>Total Ticket</h1>
-                    </Col>
-                    <Col>
-                        <Form.Control
-                            as="select"
-                            className='form-event-control'
-                            onChange={handleCategoryChange}
-                            name='eventcategory'
-                        >
-                            <option value="">Select category</option>
-                            {categories.map((category) => (
-                                <option key={category._id} value={category._id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </Form.Control>
-                    </Col>
-                </Row>
-            </div>
+        <div  className='mb-4'>
+            <Card>
+                <div className="event-height-piechart">
 
-            {totalEvent ?(
-                <div>
-                    <div className="progress-circle">
-                        <ReactApexChart options={data.options} series={data.series} type="radialBar" height={350} />
-                        <div className="ticket-icon"><PiTicket /></div>
+
+                    <div >
+                        <Row style={{ alignItems: "center", marginBottom: "30px" }}>
+                            <Col>
+                                <h3 className='piechat-head'>Total Ticket</h3>
+                            </Col>
+                            <Col>
+                                <CustomInput
+                                    type="dropdown"
+                                    options={categories}
+                                    value={selectedCategory}
+                                    onChange={handleCategoryChange}
+                                />
+
+                            </Col>
+                        </Row>
                     </div>
-                    <div className="ticket-info">
-                        <div className="tickets-sold">
-                            <div className='tickets-styles'></div>
-                            <span className="label">Sold</span>
-                            <span className="value">{totalEvent.ticketsSold}</span>
+
+                    {totalEvent ? (
+                        <div>
+                            <div className="progress-circle">
+                                <ApexChartComponent
+                                    type="radialBar"
+                                    series={data.series}
+                                    options={data.options}
+                                    height={350}
+                                />
+
+                                <div className="ticket-icon"><PiTicket /></div>
+                            </div>
+                            <div className='d-flex justify-content-around mb-4'>
+                                <ChartLabel title="Sold" className={["tickets-styles", "tickets-sold"]} value={totalEvent.ticketsSold} />
+
+                                <ChartLabel title="Unsold" className={["tickets-styles-unsold", "tickets-sold"]} value={totalEvent.ticketsLeft} />
+
+                            </div>
+
                         </div>
-                        <div className="tickets-sold">
-                            <div className='tickets-styles-unsold'></div>
-                            <span className="label">Unsold</span>
-                            <span className="value">{totalEvent.ticketsLeft}</span>
-                        </div>
-                    </div>
+                    ) : (<div className='NoEventList'>No events</div>)}
                 </div>
-            ):(<div>No events</div>)}
+            </Card>
         </div>
     );
 }

@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import dayLocaleData from 'dayjs/plugin/localeData';
 import React, { useState } from 'react';
 
+import Button from '../button/button';
 dayjs.extend(dayLocaleData);
 
 const App = ({ setCalender }) => {
@@ -24,21 +25,16 @@ const App = ({ setCalender }) => {
   };
 
   const handleReset = () => {
-    const today = dayjs(); 
-    setCurrentDate(today); 
-    setCalender(''); 
+    const today = dayjs();
+    setCurrentDate(today);
+    setCalender('');
   };
 
-  const wrapperStyle = {
-    padding: "24px 39px",
-    backgroundColor: "#fff",
-    borderRadius: "20px",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)" // Added shadow for better visual
-  };
+
 
   return (
     <div>
-      <div style={wrapperStyle}>
+      <div  className ="calender-details">
         <Calendar
           fullscreen={false}
           value={currentDate} // Set the calendar value to currentDate
@@ -75,8 +71,9 @@ const App = ({ setCalender }) => {
 
             return (
               <div className='calender-event'>
-                 <Row style={{ gap: "5px" }}>
-                  <Col lg="4" md="6" className='mb-3'>
+
+                <Row style={{ gap: "5px" }}>
+                  <Col lg="4" md="4" className='mb-3'>
                     <Select
                       size="small"
                       popupMatchSelectWidth={false}
@@ -90,7 +87,7 @@ const App = ({ setCalender }) => {
                     </Select>
                   </Col>
 
-                  <Col lg="4" md="6" className='mb-3'>
+                  <Col lg="4" md="4" className='mb-3'>
                     <Select
                       size="small"
                       popupMatchSelectWidth={false}
@@ -105,10 +102,10 @@ const App = ({ setCalender }) => {
                     </Select>
                   </Col>
 
-                  <Col lg="4" md="6" className='mb-3'>
-                    <button className='reset-button' onClick={handleReset}>
-                      Reset
-                    </button>
+                  <Col lg="4" md="4" className='mb-3'>
+                    <Button name="Reset" className='reset-button' onClick={handleReset} />
+
+
                   </Col>
                 </Row>
               </div>

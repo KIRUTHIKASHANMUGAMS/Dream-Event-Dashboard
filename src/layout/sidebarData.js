@@ -6,7 +6,7 @@ import { LuClipboardCheck } from "react-icons/lu";
 import { LuWallet } from "react-icons/lu";
 import { MdOutlineDateRange } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
-import { TbCalendarTime } from "react-icons/tb";
+
 
 
 export const SidebarData = [
@@ -17,19 +17,9 @@ export const SidebarData = [
   },
   {
     title: "Event",
+    path: "/eventList",
     icon: <MdOutlineDateRange />,
-    subNav: [
-            {
-              title: "Event List",
-              path: "/eventList",
-              icon: <TbCalendarTime />,
-            },
-            {
-              title: "Create Event",
-              path: "/createEvent",
-              icon: <TbCalendarTime />,
-            },
-    ]
+   
   },
   {
     title: "Bookings",
@@ -43,7 +33,7 @@ export const SidebarData = [
     icon: <FaUsers />,
   },
   {
-    title: "Transcation",
+    title: "Transaction",
     path: "/transaction",
     icon: <LuWallet />,
   },

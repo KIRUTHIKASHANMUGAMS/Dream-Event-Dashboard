@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import map from "../../assets/map.png";
 import { eventListDetails } from "../../redux/eventSlice";
+import Button from '../button/button';
 
 const { Sider, Content } = Layout;
 
@@ -65,28 +66,28 @@ const App = () => {
             {selectedEvent && (
                 <Sider width={400} className='calenderEvent-container'>
                     <div style={{ padding: '10px' }}>
-                        <p className='event-details-heading'>Event Detail</p>
+                        <h3 >Event Detail</h3>
                         <>
                             <div className="calender-event-detail">
                                 <div className="calender-event-time">{selectedEvent.date}</div>
                                 <div className="calender-event-info">
-                                    <div className="calender-event-label">Event</div>
-                                    <div className="calender-event-title">{selectedEvent.eventname}</div>
+                                    <h3 className="calender-event-label">Event</h3>
+                                    <h3 className="calender-event-title">{selectedEvent.eventname}</h3>
                                 </div>
                             </div>
                             <div className='eventlist-loc-container'>
                                 <p className='eventlist-location'>
-                                    <img src={map} alt="Map" style={{ marginRight: "10px" }} /> {selectedEvent.location}
+                                    <img src={map} alt="Map" style={{ marginRight: "5px" }} /> {selectedEvent.location}
                                 </p>
-                                <p><MdOutlineDateRange /> {selectedEvent.date}</p>
+                                <p className='d-flex gap-2 align-items-center'><MdOutlineDateRange /> {selectedEvent.date}</p>
                             </div>
-                            <div style={{ marginTop: "20px" }}>
-                                <p className='event-details-heading'>Event Description</p>
-                                <p className='event-details-content'>{selectedEvent.details}</p>
+                            <div className='mt-3'>
+                                <h3>Event Description</h3>
+                                <h5 className='eventColor'>{selectedEvent.details}</h5>
                             </div>
                             {selectedEvent.speakers && selectedEvent.speakers.length > 0 && (
-                                <div style={{ marginTop: "20px" }}>
-                                    <p className='event-details-heading'>Event Speaker</p>
+                                <div className='mt-3'>
+                                    <h3 className='eventColor'> Speakers</h3>
                                     <div className='eventlist-coArtist'>
                                         {selectedEvent.speakers.map((speaker, speakerIndex) => (
                                             <img 
@@ -100,13 +101,13 @@ const App = () => {
                                 </div>
                             )}
                             <div style={{ marginTop: "20px" }}>
-                                <p className='event-details-heading'> Event Guidelines and Policies:</p>
+                                <h3 className='event-details-heading'> Event Guidelines and Policies:</h3>
                                 <ol>
-                                    <li className='event-details-content'> {selectedEvent.eventGuideline}</li>
+                                    <li className='eventColor'> {selectedEvent.eventGuideline}</li>
                                 </ol>
                             </div>
                             <div>
-                                <p className='event-details-button'>Ticket Price : ${selectedEvent.price}</p>
+                                <Button  style={{width:"100%"}} name={`Ticket Price : ${selectedEvent.price}`} />
                             </div>
                         </>
                     </div>

@@ -29,6 +29,7 @@ const combine = {
   salesRevenue:config.baseURL + "sales-events",
   upcomingList:config.baseURL + "upcoming-list",
   dashboardlogin:config.baseURL + "dashboard-login",
+  refreshTokenUrl:config.baseURL + "refresh-token",
 
 
 
