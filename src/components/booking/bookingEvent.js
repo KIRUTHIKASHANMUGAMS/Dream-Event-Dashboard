@@ -22,10 +22,12 @@ const TableEvent = ({ selectedCategory, date }) => {
     customerName: event.customerName,
     location: event.location,
     totalPrice: event.totalPrice,
-    bookingDate: event.bookingDate,
+    bookingDate: new Date(event.bookingDate).toLocaleDateString(),
     seatsBooked: event.seatsBooked.join(', '),
     status: event.paymentStatus,
   }));
+
+
 
   const headers = [
     'SNo',

@@ -106,7 +106,7 @@ const Calender = () => {
                                         </Col>
 
                                         <Col lg="4" md="6" className='mb-3'>
-                                            <Button onClick={handleReset} name="Reset">
+                                            <Button type='Submit' onClick={handleReset} name="Reset">
                                              
                                             </Button>
                                         </Col>

@@ -48,10 +48,12 @@ export function setHeaderToken() {
 
                         const token = response.data.accessToken;
                         const newRefreshToken = response.data.refreshToken;
+                 
 
                         // Set new tokens in cookies
                         cookies.set('token', token, { path: "/" });
                         cookies.set('refreshToken', newRefreshToken, { path: "/" });
+                  
 
                         // Retry the original request with the new token
                         originalRequest.headers.Authorization = `Bearer ${token}`;

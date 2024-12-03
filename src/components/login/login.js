@@ -22,43 +22,56 @@ function Login() {
 
 
   const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form input
     if (!formValues.email || !formValues.password) {
       toast.error("Please fill in all fields.");
       return;
     }
-
+  
     setLoading(true);
     const details = {
       email: formValues.email,
       password: formValues.password
     };
-
+  
     try {
       const response = await loginResponse(details);
       setUser(response.data);
+      
+      // Extract tokens and user information
       const token = response.data.accessToken;
+      const name=response.data.user.name;
       const refreshToken = response.data.refreshToken;
-      const user = response?. data?.user?._id;
-      cookies.set("user", user);
+      const userId = response.data.user._id;
+      const rolePermissions = response.data.user?.rolePermission;
+      var json_str = JSON.stringify(rolePermissions);
+      cookies.set("user", userId);
       cookies.set("token", token);
-      cookies.set("refreshToken", refreshToken)
-     
-      toast.success("Login Successfully")
+      cookies.set("refreshToken", refreshToken);
+      cookies.set("roles", json_str, { path: "/", secure: true, sameSite: "Strict" });
+      cookies.set("name" ,name)
 
+    
+    
+      
+  
+      toast.success("Login Successfully");
+  
+      // Redirect to dashboard after a short delay
       setTimeout(() => {
         navigate("/dashboard");
-    }, 3000);
-      
-
+      }, 3000);
+  
     } catch (error) {
-      toast.error( error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleChange = (e) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });

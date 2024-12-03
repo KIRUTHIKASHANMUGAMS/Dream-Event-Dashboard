@@ -16,21 +16,21 @@ const EventList = ({ selectedCategory, date }) => {
     }, [dispatch, selectedCategory, date]);
 
     // Map API response to events
-    const events = transactionList.map(transaction => {
-        const paymentIntent = transaction.paymentIntent;
-        const refunds = transaction.refunds;
+ 
 
+    const events = transactionList.map((event) => {
+        console.log("flattenedData" ,event)
+    
         return {
-            name: paymentIntent.metadata.userName,
-            event: paymentIntent.metadata.eventName,
-            time: new Date(paymentIntent.created * 1000).toLocaleTimeString(), // Convert timestamp to time
-            amount: `$${(paymentIntent.amount / 100).toFixed(2)}`, // Convert cents to dollars
-            isNegative: refunds.length > 0, // If there are refunds, consider it negative
-            status: paymentIntent.status,
-            hasRefund: refunds.length > 0, // Check if there are any refunds
-            refundAmount: refunds.length > 0 ? `$${(refunds[0].amount / 100).toFixed(2)}` : null, // Get refund amount if exists
-        };
-    });
+          name: event.eventName,
+          event: event.customerName,
+          amount: event.totalPrice, // Use totalPrice from API response
+          'Seat Booked': event.seatsBooked.join(', '), // Join seat numbers into a string
+          'Payment Method': event.paymentIntentId, // Assuming payment method is linked to paymentIntentId
+          status: event.paymentStatus, // Use paymentStatus from API response
+        };  
+      });
+    
 
     return (
         <div className='mb-4'>

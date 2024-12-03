@@ -60,7 +60,7 @@ function ViewDetails() {
                                         </div>
 
                                         <div >
-                                            <Button style={{ width: "100%" }} name={`Ticket Price : ${data.price}`} />
+                                            <Button style={{ width: "100%" }} type='submit' name={`Ticket Price : ${data.price}`} />
 
                                         </div>
                                     </Col>

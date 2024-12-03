@@ -127,7 +127,7 @@ function setting() {
 
                 <Row>
                   <Col className='d-flex justify-content-end'>
-                    <Button
+                    <Button type='Submit'
                       name="Save"
                     />
                   </Col>

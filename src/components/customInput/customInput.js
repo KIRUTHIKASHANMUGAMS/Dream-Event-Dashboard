@@ -1,15 +1,15 @@
 import React from 'react';
 
-const CustomInput = ({ type, label, options, name, value, onChange }) => {
+const CustomInput = ({ type, label, options = [], name, value, onChange }) => {
     return (
         <div className="form-group">
-           {label ?( <h4 className='mb-1'> {label && <label>{label}</label>}</h4>):(<div></div>)}
+            {label && <label htmlFor={name} className='mb-1'>{label}</label>}
             {type === 'dropdown' ? (
                 <select value={value} onChange={onChange} name={name} className="form-control">
-                    <option value="">All</option>
+                    <option value="">Select an option</option>
                     {options.map((category) => (
                         <option key={category._id} value={category._id}>
-                            {category.name}
+                            {category.name || category.roleName}
                         </option>
                     ))}
                 </select>

@@ -23,7 +23,7 @@ const TableEvent = ({ selectedCategory ,date}) => {
     eventName: event.eventName,
     location: event.location,
     totalPrice: event.totalPrice,
-    bookingDate: event.bookingDate,
+    bookingDate: new Date(event.bookingDate).toLocaleDateString(),
     seatsBooked: event.seatsBooked.join(', '),
   }));
 

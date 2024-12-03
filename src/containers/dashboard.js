@@ -18,11 +18,11 @@ const Dashboard = () => {
         <Row>
           <Col xxl={9} xl={8} lg={8} md={12} xs={12}>
             <Row>
-              <Col xl={8} lg={12} md={9}>
+              <Col xl={9} lg={12} md={9}>
                 <TotalEvent />
               </Col>
 
-              <Col xl={4} lg={12} md={3}>
+              <Col xl={3} lg={12} md={3}>
                 <TicketSoldByToday />
               </Col>
 

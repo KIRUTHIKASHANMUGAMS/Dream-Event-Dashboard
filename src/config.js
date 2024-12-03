@@ -23,13 +23,23 @@ const combine = {
   eventById: config.baseURL + "eventById",
   bookingList: config.baseURL + "booking-list",
   customerList: config.baseURL + "customer-list",
-  transactionList: config.baseURL + "stripe-payment",
+  transactionList: config.baseURL + "transaction",
   dashboardList:config.baseURL + "dashboard",
   totalEventDashboard:config.baseURL + "total-events",
   salesRevenue:config.baseURL + "sales-events",
   upcomingList:config.baseURL + "upcoming-list",
   dashboardlogin:config.baseURL + "dashboard-login",
   refreshTokenUrl:config.baseURL + "refresh-token",
+  rolePermission:config.baseURL + "role-permission",
+  roleList:config.baseURL +"role",
+  roleCreate:config.baseURL +"role",
+  features:config.baseURL + "feature",
+  permission:config.baseURL + "permission",
+  createUser:config.baseURL + "create-user",
+  eventStatus:config.baseURL + "eventStatus",
+
+
+
 
 
 

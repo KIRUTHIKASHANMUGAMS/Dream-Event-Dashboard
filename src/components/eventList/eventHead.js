@@ -78,7 +78,12 @@ function EventHead({ setView, setSelectedCategory }) {
                         >
                             <MdOutlineDateRange />
                         </div>
-                        <div>< Button name="Create Event" onClick={handleClick} /></div>
+                        <div>
+                            < Button
+                                name="Create Event"
+                                featureName="Event"
+                                permissionName="Create"
+                                onClick={handleClick} /></div>
                     </div>
                 </div>
             </Card>

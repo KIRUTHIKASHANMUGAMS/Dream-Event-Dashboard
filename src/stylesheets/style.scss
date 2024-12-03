@@ -9,6 +9,15 @@ $font-weight-h4: 500;
 $font-weight-h5: 400;
 $font-weight-h6: 300;
 
+$toggle-width: 55px;
+$toggle-height: 27px;
+$thumb-size: 24px;
+$on-color: $primary-color;
+$off-color: #ccc;
+$thumb-color: #fff;
+$transition-time: 0.3s;
+
+
 h1 {
     font-size: 28px;
     font-family: $font-family-primary;
@@ -424,7 +433,7 @@ p {
 
     }
 
- 
+
 
 
 }
@@ -484,7 +493,8 @@ p {
 
 .card {
     background-color: rgba(255, 255, 255, 1);
-    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: none;
     border-radius: 20px;
 
 }
@@ -1006,7 +1016,13 @@ th {
 
     .event-card-image {
         width: 100%;
-     
+        /* Make it responsive to card size */
+        height: 200px;
+        /* Fixed height */
+        object-fit: cover;
+        /* Ensures the image fills the area without distortion */
+        border-radius: 8px;
+        /* Optional: adds rounded corners */
     }
 
     .eventlist-loc-container {
@@ -1409,7 +1425,7 @@ th {
 
 
 .form-check-label {
- 
+
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
@@ -1419,7 +1435,7 @@ th {
 }
 
 
-.account-event{
+.account-event {
 
     font-size: 14px;
     font-weight: 400;
@@ -1427,5 +1443,202 @@ th {
     text-align: left;
     color: rgba(186, 186, 186, 1);
 
-     
+
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+
+    .custom-checkbox-input {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        transition: background-color 0.2s, border 0.2s;
+
+        &:checked {
+            background-color: #4caf50; // Green when checked
+            border-color: #4caf50;
+        }
+
+        &:checked::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+        }
+
+        &:hover {
+            cursor: pointer;
+            border-color: #888;
+        }
+    }
+
+    .checkbox-label {
+        margin-left: 10px;
+        font-size: 16px;
+        color: #333;
+    }
+}
+
+
+// SCSS for the Toggle component
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    /* Prevent text selection when clicking the toggle */
+}
+
+.toggle-label {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.toggle-switch {
+    width: $toggle-width;
+    height: $toggle-height;
+    background-color: $off-color;
+    border-radius: $toggle-height / 2;
+    position: relative;
+    transition: background-color $transition-time ease;
+
+    &.on {
+        background-color: $on-color;
+    }
+
+    &.off {
+        background-color: $off-color;
+    }
+
+    .toggle-thumb {
+        width: $thumb-size;
+        height: $thumb-size;
+        background-color: $thumb-color;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 4px;
+        transform: translateY(-50%);
+        transition: left $transition-time ease;
+    }
+
+    &.on .toggle-thumb {
+        left: calc(#{$toggle-width} - #{$thumb-size - -5px}); // Thumb moves to the right
+    }
+
+    &.off .toggle-thumb {
+        left: 4px; // Thumb stays on the left
+    }
+}
+
+.hr-line {
+    border-top: rgb(240, 242, 245) solid;
+}
+
+
+.role-permission-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+    th,
+    td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    td .border-details {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+        color: #333;
+    }
+
+    td {
+        background-color: #fff;
+        color: #666;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .feature-name {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .permissions {
+        color: #777;
+        font-style: italic;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    button.edit {
+        background-color: #007bff;
+        color: white;
+    }
+
+    button.delete {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+}
+
+.booking-main-head {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .no-details {
+        padding: 20px;
+        text-align: center;
+        color: #666;
+        font-size: 16px;
+    }
+
+    .NoEventList {
+        margin-top: 20px;
+    }
 }

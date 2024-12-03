@@ -14,7 +14,7 @@ export const fetchTransactionList = (selectedCategory ,date) =>
     async (dispatch) => {
         const category={
             'eventCategory':selectedCategory,
-            'date':date
+            'eventDate':date
         }
         try {
             const response = await axios.post(config.transactionList , category);

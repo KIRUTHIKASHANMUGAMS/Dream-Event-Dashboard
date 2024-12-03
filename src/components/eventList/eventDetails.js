@@ -83,7 +83,8 @@ function EventDetails({ selectedCategory, calender }) {
 
 
                                         <p>{bookedSeatsCount}/{details.totalSeats}</p>
-                                        <Button type="Submit" name="View Detail" onClick={() => ViewDetails(details._id)} />
+                                        <Button type="button" featureName="Event" // Example feature name
+                                            permissionName="View" name="View Detail" onClick={() => ViewDetails(details._id)} />
 
                                     </div>
                                 </div>

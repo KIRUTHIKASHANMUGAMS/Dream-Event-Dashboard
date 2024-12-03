@@ -103,7 +103,7 @@ const App = ({ setCalender }) => {
                   </Col>
 
                   <Col lg="4" md="4" className='mb-3'>
-                    <Button name="Reset" className='reset-button' onClick={handleReset} />
+                    <Button name="Reset" className='reset-button' type='Reset' onClick={handleReset} />
 
 
                   </Col>

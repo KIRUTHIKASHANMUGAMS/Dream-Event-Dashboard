@@ -4,15 +4,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import Autocomplete from "react-google-autocomplete";
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate,useParams  } from 'react-router-dom';
+import { toast,ToastContainer  } from 'react-toastify';
 
-import { createEventDetails, eventCategoryDetails } from "../../redux/eventSlice";
+import { CreateEventById, editcreateEventDetails, eventCategoryDetails } from "../../redux/eventSlice";
 import Button from '../button/button';
 import Card from '../card/card';
 import CustomInput from '../customInput/customInput';
 import CustomTextArea from '../customInput/customTextArea';
 import CustomTable from '../table/speakerEventTable';
+
 const headers = ['Speaker Name', 'Speaker Type', 'speaker Image'];
 
 const CreateEvent = () => {
@@ -35,23 +36,46 @@ const CreateEvent = () => {
     const initialSpeakerValues = {
         speakerName: '',
         speakerType: '',
-        speakerImage: null,
+        speakerImage:'' ,
     };
+    const navigate=useNavigate()
     const [formValues, setFormValues] = useState(initialFormValues);
     const [speakers, setSpeakers] = useState([]); // Step 1: Initialize speakers array
     const [currentSpeaker, setCurrentSpeaker] = useState(initialSpeakerValues);
     const [error, setError] = useState({});
-    const navigate = useNavigate()
     const dispatch = useDispatch();
     const categories = useSelector((state) => state.eventSlice.eventCategory) || [];
+    const createEventById = useSelector((state) => state.eventSlice.createEventById) || [];
+    //const editEvent = useSelector((state) => state.eventSlice.editEvent) || [];
+
+    const { id } = useParams();
     const fileInputRef = useRef(null);
+
+
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
-        setFormValues({
-            ...formValues,
+
+        setFormValues((prev) => ({
+            ...prev,
             [name]: type === 'file' ? files[0] : value,
-        });
+        }));
+
+        // Preview the new uploaded image
+        if (name === "imageUrl" && type === "file" && files.length > 0) {
+            const file = files[0];
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                setFormValues((prev) => ({
+                    ...prev,
+                    imageUrlPreview: reader.result, // Add preview URL for the image
+                }));
+            };
+
+            reader.readAsDataURL(file); // Read the file and create a data URL for preview
+        }
     };
+
     const handleSpeakerChange = (e) => {
         const { name, value, files } = e.target;
         if (name === 'speakerImage') {
@@ -62,20 +86,80 @@ const CreateEvent = () => {
     };
 
 
+
+
+    useEffect(() => {
+        dispatch(eventCategoryDetails());
+        if (id) {
+            dispatch(CreateEventById(id));
+        }
+    }, [dispatch, id]);
+
+
+    useEffect(() => {
+        if (createEventById && createEventById._id) {
+            setFormValues({
+                eventId: createEventById.eventId || '',
+                eventName: createEventById.eventName || '',
+                eventDescription: createEventById.eventDescription || '',
+                location: createEventById.location || '',
+                eventTime: createEventById.eventTime || '',
+                eventDate: createEventById.eventDate ? createEventById.eventDate.split('T')[0] : '',
+                price: createEventById.price || '',
+                lat: createEventById.lat || '',
+                long: createEventById.long || '',
+                eventType: createEventById.eventType || '',
+                totalSeats: createEventById.totalSeats || '',
+                eventGuideline: createEventById.eventGuideline || '',
+                imageUrl: createEventById.imageUrl || ''
+            });
+            const newSpeakers = createEventById.speakers.map(event => ({
+                speakerName: event.speakerName || '',
+                speakerType: event.speakerType || '',
+                speakerImage: event.speakerImage || null,
+            }));
+    
+          
+    
+            if (newSpeakers.length > 0) {
+           
+                setSpeakers(newSpeakers)
+            }
+        
+        }
+    }, [createEventById]);
+
+
     const addSpeaker = () => {
         if (currentSpeaker.speakerName && currentSpeaker.speakerType && currentSpeaker.speakerImage) {
-            setSpeakers(prevSpeakers => [...prevSpeakers, currentSpeaker]);
-            setCurrentSpeaker(initialSpeakerValues);
+            // Clear the speakers data before adding new one (if you want to reset every time)
+            setSpeakers([currentSpeaker]); // This clears existing data and adds the new speaker
+            setCurrentSpeaker(initialSpeakerValues); // Reset the speaker input fields
             if (fileInputRef.current) {
-                fileInputRef.current.value = null;
+                fileInputRef.current.value = null; // Clear the file input field
             }
         } else {
-            alert("Please fill in all speaker fields.");
+            alert("Please fill in all fields, including the speaker image.");
         }
     };
 
 
-    const handleSubmit = async (e) => {
+
+
+
+
+
+    useEffect(() => {
+        dispatch(eventCategoryDetails());
+        if (id) {
+            dispatch(CreateEventById(id));
+        }
+    }, [dispatch, id]);
+
+
+
+    
+    const handleSubmit =async (e) => {
         e.preventDefault();
         if (validate()) {
             const formData = new FormData();
@@ -85,11 +169,22 @@ const CreateEvent = () => {
             speakers.forEach((speaker, index) => {
                 formData.append(`speakers[${index}][speakerName]`, speaker.speakerName);
                 formData.append(`speakers[${index}][speakerType]`, speaker.speakerType);
-                formData.append(`speakers[${index}][speakerImage]`, speaker.speakerImage);
+                if (speaker.speakerImage) {
+                    formData.append(`speakers[${index}][speakerImage]`, speaker.speakerImage);
+                } 
+           
+
             });
-            try {
-                const response = await dispatch(createEventDetails(formData)).unwrap();
-                toast.success("Event created successfully!", {
+            console.log("Speakers Dataerhuyeuyrry: ", speakers);
+            const data = {
+                id: id,
+                formData: formData
+            }
+
+          
+            try{
+                const response = await   dispatch(editcreateEventDetails(data)).unwrap();
+                toast.success("Event updated successfully!", {
                     display: 'flex',
                     toastId: 'user-action',
                     autoClose: 2000,
@@ -98,42 +193,38 @@ const CreateEvent = () => {
                     toastClassName: 'custom-toast',
                     bodyClassName: 'custom-toast',
                 });
-                console.log("eeeeeeee", response)
+
                 if (response && response.status === 200) {
-                    setTimeout(() => {
+                    setTimeout(()=>{
                         navigate('/eventList'); // Navigate on success
-                    }, 2000)
-
+                    },2000)
+                 
                 }
-
-            } catch (err) {
+            
+            }catch(err){
                 console.log(err)
-                toast.error(err.message, {
+                toast.success(err.message, {
                     display: 'flex',
-                    toastId: 'error-action',
+                    toastId: 'user-action',
                     autoClose: 2000,
                     closeOnClick: true,
                     pauseOnHover: true,
                     toastClassName: 'custom-toast',
                     bodyClassName: 'custom-toast',
                 });
-
+             
+         
             }
 
-
+           
 
         }
     };
 
-
     useEffect(() => {
         dispatch(eventCategoryDetails());
-
-    }, [dispatch]);
-
-
-
-
+        dispatch(CreateEventById(id))
+    }, [dispatch, id]);
 
 
 
@@ -144,34 +235,34 @@ const CreateEvent = () => {
         let isFormValid = true;
 
 
-        if (!formValues.eventId || formValues.eventId.trim() === "") {
+        if (!formValues.eventId || formValues.eventId === "") {
             isFormValid = false;
             error.eventId = "Please enter the event category.";
         }
 
-        if (!formValues.eventName || formValues.eventName.trim() === "") {
+        if (!formValues.eventName || formValues.eventName === "") {
             isFormValid = false;
             error.eventName = "Please enter the event name.";
         }
-        if (!formValues.eventDescription || formValues.eventDescription.trim() === "") {
+        if (!formValues.eventDescription || formValues.eventDescription === "") {
             isFormValid = false;
             error.eventDescription = "Please enter the event description.";
         }
 
 
-        if (!formValues.location || formValues.location.trim() === "") {
+        if (!formValues.location || formValues.location === "") {
             isFormValid = false;
             error.location = "Please enter the location.";
         }
-        if (!formValues.eventDate || formValues.eventDate.trim() === "") {
+        if (!formValues.eventDate || formValues.eventDate === "") {
             isFormValid = false;
             error.eventDate = "Please enter the event date.";
         }
-        if (!formValues.eventTime || formValues.eventTime.trim() === "") {
+        if (!formValues.eventTime || formValues.eventTime === "") {
             isFormValid = false;
             error.eventTime = "Please enter the event date.";
         }
-        if (!formValues.price || formValues.price.trim() === "") {
+        if (!formValues.price || formValues.price === "") {
             isFormValid = false;
             error.price = "Please enter the event price.";
         }
@@ -181,17 +272,17 @@ const CreateEvent = () => {
 
 
 
-        if (!formValues.eventType || formValues.eventType.trim() === "") {
+        if (!formValues.eventType || formValues.eventType === "") {
             isFormValid = false;
             error.eventType = "Please enter the event type.";
         }
 
-        if (!formValues.totalSeats || formValues.totalSeats.trim() === "") {
+        if (!formValues.totalSeats || formValues.totalSeats === "") {
             isFormValid = false;
             error.totalSeats = "Please enter the total seats.";
         }
 
-        if (!formValues.eventGuideline || formValues.eventGuideline.trim() === "") {
+        if (!formValues.eventGuideline || formValues.eventGuideline === "") {
             isFormValid = false;
             error.eventGuideline = "Please enter the event guideline.";
         }
@@ -324,9 +415,8 @@ const CreateEvent = () => {
                                                     apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                                                     className='form-event-control form-control'
                                                     name="location"
-
+                                                    value={formValues.location}
                                                     onPlaceSelected={(place) => {
-                                                        console.log(place);
                                                         const lat = place.geometry.location.lat(); // Get latitude
                                                         const long = place.geometry.location.lng(); // Get longitude
 
@@ -398,6 +488,21 @@ const CreateEvent = () => {
                                             onChange={handleChange}
                                             name="imageUrl"
                                         />
+                                        {formValues.imageUrlPreview ? (
+                                            <img
+                                                src={formValues.imageUrlPreview}
+                                                alt="Preview"
+                                                style={{ width: '40%', height: 'auto', marginTop: "10px" }}
+                                            />
+                                        ) : formValues.imageUrl ? (
+                                            <img
+                                                src={`http://localhost:8000/${formValues.imageUrl}`}
+                                                alt="Event"
+                                                style={{ width: '40%', height: 'auto', marginTop: "10px" }}
+                                            />
+                                        ) : (
+                                            <div>No image available</div>
+                                        )}
 
                                         <p style={{ color: 'red' }}>{error.imageUrl}</p>
 
@@ -426,7 +531,6 @@ const CreateEvent = () => {
                                         <CustomInput
                                             type="text"
                                             label="Speaker Name"
-                                            value={currentSpeaker.speakerName}
                                             onChange={handleSpeakerChange}
                                             name="speakerName"
                                         />
@@ -435,7 +539,6 @@ const CreateEvent = () => {
                                     <Form.Group controlId="speakerDescription" className="mb-3">
                                         <CustomTextArea
                                             label="Speaker Type"
-                                            value={currentSpeaker.speakerType}
                                             onChange={handleSpeakerChange}
                                             name="speakerType"
                                         />
@@ -466,8 +569,8 @@ const CreateEvent = () => {
                                     </div>
                                     <div className='event-button'>
                                         <Button
-                                            type="Submit"
                                             onClick={handleSubmit}
+                                            type="button"
                                             name=" Add Event"
                                         />
 
@@ -489,3 +592,4 @@ const CreateEvent = () => {
 };
 
 export default CreateEvent;
+

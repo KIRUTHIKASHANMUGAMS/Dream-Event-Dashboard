@@ -8,50 +8,45 @@ import CustomTable from '../table/customTable';
 const TableEvent = ({ selectedCategory, date }) => {
   const dispatch = useDispatch();
   const transactionList = useSelector((state) => state.transactionSlice.transactionList) || [];
-  console.log("transactionList" , transactionList)
+
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchTransactionList(selectedCategory, date));
     };
     fetchData();
   }, [dispatch, selectedCategory, date]);
-  const flattenedData = transactionList.flatMap((event, index) => {
-    const metadata = event.paymentIntent.metadata || {};
-    const hasRefunds = event.refunds && event.refunds.length > 0;
-    const status = hasRefunds ? 'refunded' : event.paymentIntent.status; // Set status to 'refunded' if there are refunds
-  
+
+  const flattenedData = transactionList.map((event, index) => {
+    console.log("flattenedData" ,event)
+
     return {
       SNo: index + 1,
-      eventName: metadata.eventName,
-      customerName: metadata.userName,
-      totalAmount: event.paymentIntent.amount,
-      seatBooked: JSON.parse(metadata.seats_booked || '[]'),
-      PaymentMethod: event.paymentIntent.payment_method_types,
-      status: status, // Use updated status
-    };
+      "Event Name": event.eventName,
+      'Customer Name': event.customerName,
+      'Total Amount': event.totalPrice, // Use totalPrice from API response
+      'Seat Booked': event.seatsBooked.join(', '), // Join seat numbers into a string
+      'Payment Method': event.paymentIntentId, // Assuming payment method is linked to paymentIntentId
+      'Status': event.paymentStatus, // Use paymentStatus from API response
+    };  
   });
-  
-  console.log("flattenedData" ,flattenedData)
 
   const headers = [
     'SNo',
-    'eventName',
-    'customerName',
-    'totalAmount',
-    'seatBooked',
-    'PaymentMethod',
-    'status',
+    'Event Name',
+    'Customer Name',
+    'Total Amount',
+    'Seat Booked',
+    'Payment Method',
+    'Status',
   ];
 
   // Function to determine the color based on status
   const getStatusStyle = (status) => {
     switch (status) {
-      case 'refunded':
-        return { backgroundColor: 'rgba(231, 28, 28, 1)', color: 'white' };
-      case 'succeeded':
-        return { backgroundColor: 'rgba(34, 166, 1, 1)', color: 'white' };
-      case 'canceled':
+      case 'Cancelled':
         return { backgroundColor: 'rgba(249, 185, 49, 1)', color: 'white' };
+      case 'Paid':
+        return { backgroundColor: 'rgba(34, 166, 1, 1)', color: 'white' };
       default:
         return {};
     }
@@ -66,20 +61,20 @@ const TableEvent = ({ selectedCategory, date }) => {
 
   return (
     <Card>
-    <div className='booking-main-head'>
-      {flattenedData.length > 0 ? (
-        <CustomTable
-          headers={headers}
-          data={flattenedData}
-          rowsPerPage={5}
-          renderCell={(header, value) =>
-            header === 'status' ? renderStatus(value) : value
-          }
-        />
-      ) : (
-        <div className='no-details NoEventList'><p>No transactions available.</p> </div>
-      )}
-    </div>
+      <div className='booking-main-head'>
+        {flattenedData.length > 0 ? (
+          <CustomTable
+            headers={headers}
+            data={flattenedData}
+            rowsPerPage={5}
+            renderCell={(header, value) =>
+              header === 'Status' ? renderStatus(value) : value
+            }
+          />
+        ) : (
+          <div className='no-details NoEventList'><p>No transactions available.</p></div>
+        )}
+      </div>
     </Card>
   );
 };

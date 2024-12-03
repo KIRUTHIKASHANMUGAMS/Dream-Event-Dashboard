@@ -30,6 +30,10 @@ function Header({ toggleSidebar, isOpen }) {
   const [show, setShow] = useState(false); // Corrected state declaration
   const cookies = new Cookies(null, { path: "/" });
   const handleShow = () => setShow(prev => !prev); // Toggle show state
+    const roles = cookies.get("roles"); 
+  const name = cookies.get("name"); 
+
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,6 +51,7 @@ function Header({ toggleSidebar, isOpen }) {
     cookies.remove('refreshToken');
     cookies.remove('token');
     cookies.remove('user');
+    cookies.remove('roles')
     window.location.href = '/';
   
   };
@@ -89,8 +94,10 @@ function Header({ toggleSidebar, isOpen }) {
           <div className="profile-content d-flex align-items-center gap-3" onClick={handleShow}>
             <div>
             
-              <h3>Minato Namikaze</h3>
-              <p className="header-owner">Owner</p>
+              <h3>{name}</h3>
+              {roles.map((role) => (
+              <p className="header-owner">{role.roleName}</p>
+              ))}
             </div>
        
           <div className="event-icons" ></div>

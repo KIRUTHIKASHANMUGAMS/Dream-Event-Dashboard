@@ -107,7 +107,7 @@ const App = () => {
                                 </ol>
                             </div>
                             <div>
-                                <Button  style={{width:"100%"}} name={`Ticket Price : ${selectedEvent.price}`} />
+                                <Button type="Submit" style={{width:"100%"}} name={`Ticket Price : ${selectedEvent.price}`} />
                             </div>
                         </>
                     </div>

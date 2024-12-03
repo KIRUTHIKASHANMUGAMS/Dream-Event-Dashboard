@@ -2,13 +2,12 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 const CustomTable = ({ headers, data }) => {
-  // Convert object to array if necessary
   const speakersArray = Array.isArray(data) ? data : data ? [data] : [];
 
   if (speakersArray.length === 0) {
     return <div>No data available</div>;
   }
-
+  
   return (
     <div>
       <Table hover>
@@ -21,18 +20,19 @@ const CustomTable = ({ headers, data }) => {
         </thead>
         <tbody>
           {speakersArray.map((speaker, index) => (
-            <tr key={index}>
+            <tr key={speaker._id || index}>
               <td>{speaker.speakerName}</td>
               <td>{speaker.speakerType}</td>
               <td>
                 {speaker.speakerImage ? (
                   <img
-                    src={URL.createObjectURL(speaker.speakerImage)}
-                    alt="Speaker"
-                    style={{ width: '50px', height: '50px' }}
+                 
+                    src={typeof speaker.speakerImage === 'string' ? `http://localhost:8000/${speaker.speakerImage}` : URL.createObjectURL(speaker.speakerImage)}
+                    alt={`${speaker.speakerName} Image`}
+                    style={{ width: '50px', height: '50px', borderRadius: '50%' }}
                   />
                 ) : (
-                  'No image uploaded'
+                  "no image"
                 )}
               </td>
             </tr>

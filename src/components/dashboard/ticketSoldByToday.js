@@ -19,7 +19,7 @@ function ticketSoldByToday() {
 
     return (
         <div className='ticket-details'>
-            <h3 >Ticket Sold By </h3>
+            <h3 >Ticket Sold</h3>
             <h3 >Today</h3>
             <h1 >{data.ticketSoldByToday}</h1>
             <ProgressBar

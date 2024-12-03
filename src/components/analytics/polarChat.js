@@ -7,11 +7,15 @@ import { fetchTransactionList, totalTicketDashboardList } from '../../redux/dash
 import Card from '../card/card';
 import ChartLabel from '../chart/chartLabel';
 
+
+
 function PolarChart() {
     const dispatch = useDispatch();
 
     const datas = useSelector((state) => state.dashboardSlice.dashboardList) || {};
     const totalEvent = useSelector((state) => state.dashboardSlice.totalTicketDashboard) || {};
+
+
 
     useEffect(() => {
         const fetchData = async () => {
